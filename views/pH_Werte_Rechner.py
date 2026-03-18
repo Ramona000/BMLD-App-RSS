@@ -3,6 +3,7 @@ import streamlit as st
 import math
 from datetime import datetime
 import pytz
+from utils.data_manager import DataManager  # --- NEW CODE: import data manager ---
 
 # --- NEW CODE: initialize the session state for the history DataFrame ---
 if 'data_df' not in st.session_state:
@@ -55,6 +56,11 @@ if submitted:
 
  # --- NEW CODE to update history in session state and display it ---
     st.session_state['data_df'] = pd.concat([st.session_state['data_df'], pd.DataFrame([result])], ignore_index=True)
+ 
+  # --- CODE UPDATE: save data to data manager ---
+    data_manager = DataManager()
+    data_manager.save_user_data(st.session_state['data_df'], 'data.csv')
+    # --- END OF CODE UPDATE ---
 
 st.subheader("Berechnungshistorie")       
 # --- NEW CODE to display the history table ---
