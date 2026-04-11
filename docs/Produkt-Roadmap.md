@@ -6,11 +6,11 @@
 - V3.0: + Konzentrationsrechner
 - V4.0: + Molaremasse-Rechner
 - V5.0: + Einheitenumrechner
-- V6.0: +Datenspeicherung
+- V6.0: + Datenspeicherung
 - V7.0: + Favoritenliste erstellen
 - V8.0: + PSE einfügen
 - V9.0: + Einleitungsseite Schreiben 
 - V10.0: + Home-Seite erstellen
 - V11.0: + Übersichtsleiste erstellen
-- V12.0: +User Login (mit Avatar und Einstellungen)
-- V13.0:Hilfe-Fenster erstellen
+- V12.0: + User Login (mit Avatar und Einstellungen)
+- V13.0: + Hilfe-Fenster erstellen
