@@ -2,4 +2,4 @@ import streamlit as st
 
 st.title("Periodensystem")
 
-st.image("periodensystem.png", caption="Periodensystem der Elemente")
+st.image("views/assets/periodensystem.png", caption="Periodensystem der Elemente")
