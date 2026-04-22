@@ -4,7 +4,7 @@ import periodictable as pt
 
 st.title ("Molaremasse-Rechner")
 
-formula = st.text_input("Gib eine chemische Formel ein (z.B. H2O):")
+formula = st.text_input("Gib eine chemische Formel ein. \n\n Formel muss in Grossbuchstaben geschrieben werden! (z.B. H2O):")
 #Berechnungsbutton
 calculate = st.button("Berechnen")
 
@@ -46,14 +46,17 @@ def calculate_molar_mass(composition):
     return total_mass
 
 #Anzeigen im streamlit
-if formula:
-    composition = parse_formula(formula)
-    
-    st.write("Zusammensetzung:", composition)
-    
-    molar_mass = calculate_molar_mass(composition)
-    
-    if molar_mass:
-        st.success(f"Molare Masse: {molar_mass:.3f} g/mol")
+if calculate:
+    if not formula:
+        st.warning("Bitte gib eine Formel ein!")
     else:
-        st.error("Unbekanntes Element!")
+        composition = parse_formula(formula)
+        
+        st.write("Zusammensetzung:", composition)
+        
+        molar_mass = calculate_molar_mass(composition)
+        
+        if molar_mass:
+            st.success(f"Molare Masse: {molar_mass:.3f} g/mol")
+        else:
+            st.error("Unbekanntes Element!")
