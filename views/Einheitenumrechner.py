@@ -248,3 +248,6 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
                 ergebnis = volumen_ml
             
             st.success(f"{volumen} {von_einheit} = {ergebnis:.10g} {zu_einheit}")
+
+if st.button("Zur Startseite"):
+    st.switch_page("views/home.py")

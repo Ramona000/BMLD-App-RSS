@@ -22,3 +22,6 @@ if st.button("Berechnen"):
         st.success(f"Konzentration: {konzentration:.4f} mol/L")
     else:
         st.warning("Bitte ein Volumen größer als 0 eingeben!")
+
+if st.button("Zur Startseite"):
+    st.switch_page("views/home.py")

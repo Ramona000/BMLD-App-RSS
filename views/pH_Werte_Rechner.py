@@ -127,3 +127,6 @@ if not st.session_state['data_df'].empty:
     ).interactive()
 
     st.altair_chart(final_chart, use_container_width=True)
+    
+if st.button("Zur Startseite"):
+    st.switch_page("views/home.py")

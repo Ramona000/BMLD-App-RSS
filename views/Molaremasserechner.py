@@ -60,3 +60,6 @@ if calculate:
             st.success(f"Molare Masse: {molar_mass:.3f} g/mol")
         else:
             st.error("Unbekanntes Element!")
+
+if st.button("Zur Startseite"):
+    st.switch_page("views/home.py")

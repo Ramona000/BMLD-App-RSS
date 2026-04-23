@@ -27,3 +27,7 @@ if st.button("Titer berechnen"):
         st.warning("Lösung ist schwächer als erwartet")
     else:
         st.info("Lösung ist genau richtig")
+
+
+if st.button("Zur Startseite"):
+    st.switch_page("views/home.py")
