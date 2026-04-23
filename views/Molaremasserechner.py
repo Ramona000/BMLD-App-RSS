@@ -1,9 +1,11 @@
 import streamlit as st
 import re
 import periodictable as pt
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
 
+show_navigation(current_page="Molaremasserechner") 
 st.title ("Molaremasse-Rechner")
+
 
 formula = st.text_input("Gib eine chemische Formel ein. \n\n Formel muss in Grossbuchstaben geschrieben werden! (z.B. H2O):")
 #Berechnungsbutton

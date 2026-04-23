@@ -1,9 +1,9 @@
 import streamlit as st
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
 import streamlit as st
 
 
-
+show_navigation(current_page="Titer") 
 st.title("Titer-Rechner")
 
 c_soll = st.number_input("Soll-Konzentration (mol/L)", min_value=0.0, format="%.6f")

@@ -1,10 +1,12 @@
 import streamlit as st
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
 import streamlit as st
 
 
+show_navigation(current_page="Einheitenumrechner") 
 st.title("Einheitenumrechner")
 st.write("Hier kannst du verschiedene Einheiten umrechnen. Wähle die Kategorie und die Einheiten aus, die du umrechnen möchtest.")
+
 
 # Kategorie-Auswahl
 kategorien = [
@@ -251,7 +253,10 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
                 ergebnis = volumen_ml
             
             st.success(f"{volumen} {von_einheit} = {ergebnis:.10g} {zu_einheit}")
+# ... bestehender Code ...
 
+
+# ... Rest des Codes, inkl. col1, col2 für Hilfe und Zur Startseite ...
 col1, col2 = st.columns([1, 1])
 with col1:
     if st.button("Zur Startseite"):

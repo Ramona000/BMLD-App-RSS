@@ -5,7 +5,9 @@ from datetime import datetime
 import pytz
 from utils.data_manager import DataManager  # --- NEW CODE: import data manager ---
 import altair as alt
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
+
+show_navigation(current_page="pH_Werte_Rechner") 
 
 # --- NEW CODE: initialize the session state for the history DataFrame ---
 if 'data_df' not in st.session_state:

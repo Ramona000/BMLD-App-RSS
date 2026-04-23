@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 import datetime
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
 
 from utils.data_manager import DataManager
 
 from functions.Verdünnungsrechner import verduennungsrechner, plot_verduennung
 
+show_navigation(current_page="Verdünngsrechner") 
 st.title("Verdünnungsrechner")
 
 C1 = st.number_input("Anfangskonzentration (C1)", min_value=0.01)

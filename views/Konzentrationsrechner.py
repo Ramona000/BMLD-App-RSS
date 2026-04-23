@@ -1,9 +1,11 @@
 import streamlit as st
-from views.Hilfefenster import show_help
+from views.Hilfefenster import show_help, show_navigation
 
+show_navigation(current_page="Konzentrationsrechner") 
 st.title("🧪 Konzentrationsrechner")
 
 st.write("Berechne die molare Konzentration (c = n / V)")
+
 
 #Eingabefelder 
 stoffmenge = st.number_input("Stoffmenge n (in mol)", min_value=0.0)
