@@ -23,7 +23,7 @@ if 'data_df' not in st.session_state:
 # --- END OF CODE UPDATE ---
 
 
-pg_home = st.Page("views/home.py", title="Home", icon=":material/home:", default=True)
+pg_home = st.Page("views/home.py", title="Startseite", icon=":material/home:", default=True)
 pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/info:")
 pg_third = st.Page("views/Einheitenumrechner.py", title="Einheitenumrechner", icon=":material/info:")
 pg_fourth = st.Page("views/Konzentrationsrechner.py", title="Konzentrationsrechner", icon=":material/info:")
