@@ -1,4 +1,8 @@
 import streamlit as st
+from views.Hilfefenster import show_help
+import streamlit as st
+
+
 
 st.title("Titer-Rechner")
 
@@ -29,5 +33,19 @@ if st.button("Titer berechnen"):
         st.info("Lösung ist genau richtig")
 
 
-if st.button("Zur Startseite"):
-    st.switch_page("views/home.py")
+
+# Spezifischer Hilfetext für Titer
+help_text = [
+    "Gib die Ausgangskonzentration und das Volumen ein.",
+    "Klicke auf Berechnen, um das Ergebnis zu sehen.",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
+]
+
+col1, col2 = st.columns([1, 1])
+with col1:
+    if st.button("Zur Startseite"):
+        st.switch_page("views/home.py")
+
+with col2:
+    show_help(title="Hilfe zum Titer", text_lines=help_text)

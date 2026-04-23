@@ -1,6 +1,7 @@
 import streamlit as st
 import re
 import periodictable as pt
+from views.Hilfefenster import show_help
 
 st.title ("Molaremasse-Rechner")
 
@@ -61,5 +62,19 @@ if calculate:
         else:
             st.error("Unbekanntes Element!")
 
-if st.button("Zur Startseite"):
-    st.switch_page("views/home.py")
+
+# Spezifischer Hilfetext für Molare Masse
+help_text = [
+    "Gib eine chemische Formel in Grossbuchstaben ein z.B. C6H12O6 für Glucose.",
+    "Klicke auf Berechnen, um die molare Masse zu erhalten.",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
+]
+
+col1, col2 = st.columns([1, 1])
+with col1:
+    if st.button("Zur Startseite"):
+        st.switch_page("views/home.py")
+
+with col2:
+    show_help(title="Hilfe zum Molare-Massen-Rechner", text_lines=help_text)

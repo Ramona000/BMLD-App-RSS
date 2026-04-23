@@ -1,41 +1,41 @@
 import streamlit as st
 
-def show_help():
+def show_help(title="Hilfe", text_lines=None):
+    if text_lines is None:
+        text_lines = [
+            "Wähle eine Kategorie, gib die Werte ein und klicke auf Umrechnen.",
+            "- Flüssigkeiten in Gewicht: Volumen → Masse",
+            "- Gewicht in Flüssigkeit: Masse → Volumen",
+            "- Gewicht in Gewicht: Gewichtseinheiten umrechnen",
+            "- Flüssigkeit in Flüssigkeit: Volumeneinheiten umrechnen",
+            "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+            "[Frag ChatGPT!](https://chat.openai.com)"
+        ]
 
-    # CSS nur für unseren Container
-    st.markdown("""
-    <style>
-    .help-button-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
-    .help-button-container button {
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        font-size: 20px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    if "help_modal_open" not in st.session_state:
+        st.session_state.help_modal_open = False
 
-    # Container mit eigener Klasse
-    st.markdown('<div class="help-button-container">', unsafe_allow_html=True)
+    if st.button("Hilfe", key="help_button"):
+        st.session_state.help_modal_open = True
 
-    if st.button("❓", key="help_button"):
-        st.session_state.show_help = True
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Popup
-    if "show_help" not in st.session_state:
-        st.session_state.show_help = False
-
-    if st.session_state.show_help:
-        st.markdown("### Hilfe & Support")
-        st.write("Du bist überfordert und kommst nicht weiter?")
-        st.markdown("[Frag ChatGPT!](https://chat.openai.com)")
-
-        if st.button("Schließen", key="close_help"):
-            st.session_state.show_help = False
+    if st.session_state.help_modal_open:
+        if hasattr(st, "modal"):
+            with st.modal(title):
+                st.markdown(f"### {title}")
+                for line in text_lines:
+                    if line.startswith("- ") or line.startswith("["):
+                        st.markdown(line)
+                    else:
+                        st.write(line)
+                if st.button("Schließen", key="close_help"):
+                    st.session_state.help_modal_open = False
+        else:
+            with st.expander(title, expanded=True):
+                st.markdown(f"### {title}")
+                for line in text_lines:
+                    if line.startswith("- ") or line.startswith("["):
+                        st.markdown(line)
+                    else:
+                        st.write(line)
+                if st.button("Schließen", key="close_help"):
+                    st.session_state.help_modal_open = False

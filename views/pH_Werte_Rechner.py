@@ -5,6 +5,7 @@ from datetime import datetime
 import pytz
 from utils.data_manager import DataManager  # --- NEW CODE: import data manager ---
 import altair as alt
+from views.Hilfefenster import show_help
 
 # --- NEW CODE: initialize the session state for the history DataFrame ---
 if 'data_df' not in st.session_state:
@@ -128,5 +129,22 @@ if not st.session_state['data_df'].empty:
 
     st.altair_chart(final_chart, use_container_width=True)
     
-if st.button("Zur Startseite"):
-    st.switch_page("views/home.py")
+
+# Spezifischer Hilfetext für pH-Werte Rechner
+help_text = [
+    "Wähle den Lösungstyp (starke Säure oder starke Base) aus.",
+    "Gib die Konzentration in mol/L ein.",
+    "Klicke auf 'pH-Wert berechnen', um das Ergebnis zu erhalten.",
+    "Die Berechnungshistorie zeigt alle vorherigen Berechnungen in einer Tabelle.",
+    "Der Chart visualisiert den zeitlichen Verlauf der pH-Werte mit farbigen Zonen (sauer, neutral, basisch).",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
+]
+
+col1, col2 = st.columns([1, 1])
+with col1:
+    if st.button("Zur Startseite"):
+        st.switch_page("views/home.py")
+
+with col2:
+    show_help(title="Hilfe zum pH-Werte Rechner", text_lines=help_text)
