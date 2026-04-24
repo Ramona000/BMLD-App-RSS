@@ -263,4 +263,4 @@ with col1:
         st.switch_page("views/home.py")
 
 with col2:
-    show_help()
+    show_help(title="Hilfe zum Einheitenumrechner")

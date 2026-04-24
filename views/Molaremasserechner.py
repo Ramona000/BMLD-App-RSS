@@ -79,4 +79,4 @@ with col1:
         st.switch_page("views/home.py")
 
 with col2:
-    show_help(title="Hilfe zum Molare-Massen-Rechner", text_lines=help_text)
+    show_help(title="Hilfe zum Molaremasse-Rechner", text_lines=help_text)

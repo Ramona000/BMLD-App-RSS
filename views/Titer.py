@@ -48,4 +48,4 @@ with col1:
         st.switch_page("views/home.py")
 
 with col2:
-    show_help(title="Hilfe zum Titer", text_lines=help_text)
+    show_help(title="Hilfe zum Titer-Rechner", text_lines=help_text)
