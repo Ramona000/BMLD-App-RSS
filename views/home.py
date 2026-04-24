@@ -1,16 +1,51 @@
 import streamlit as st
 
-st.title("Streamlit App für pH-Werte")
+# STYLE
+st.markdown("""
+<style>
+div.stButton > button {
+    width: 100%;
+    height: 80px;
+    font-size: 18px;
+    border-radius: 12px;
+    margin: 5px 0px;
+}
+</style>
+""", unsafe_allow_html=True)
 
-# !! WICHTIG: Eure Emails müssen in der App erscheinen!!
+st.title("🧪 Laborrechner")
+st.write("Wähle einen Rechner oder eine Funktion:")
 
-"""
-Diese App wurde von folgenden Personen entwickelt:
-- Ramona Hofer(hoferra2@students.zhaw.ch)
-- Samira Hofer (hofersa5@students.zhaw.ch)
-- Seraina Winzeler (winzeser@students.zhaw.ch)
+col1, col2 = st.columns(2)
 
-Auf der Unterseite findet ihr die App von Ramona und Samira, die einen pH-Werte Rechner darstellt. Viel Spass beim Ausprobieren :)
+with col1:
+    if st.button("📘 Einleitung"):
+        st.switch_page("views/Einleitung.py")
 
-Autor: Ramona Hofer (hoferra2@students.zhaw.ch)
-"""
+    if st.button("🧮 Konzentrationsrechner"):
+        st.switch_page("views/Konzentrationsrechner.py")
+
+    if st.button("🧬 Molare Masse"):
+        st.switch_page("views/Molaremassenrechner.py")
+
+    if st.button("⚗️ pH-Rechner"):
+        st.switch_page("views/pH_Werte_Rechner.py")
+
+    if st.button("💧 Verdünnungsrechner"):
+        st.switch_page("views/Verdünnungsrechner.py")
+
+with col2:
+    if st.button("📏 Einheitenumrechner"):
+        st.switch_page("views/Einheitenumrechner.py")
+
+    if st.button("🧪 Titer-Rechner"):
+        st.switch_page("views/Titer.py")
+
+    if st.button("🔬 Periodensystem"):
+        st.switch_page("views/PSE.py")
+
+    if st.button("⭐ Favoriten"):
+        st.switch_page("views/Favoritenliste.py")
+
+    if st.button("⚙️ Einstellungen"):
+        st.switch_page("views/Einstellungen.py")
