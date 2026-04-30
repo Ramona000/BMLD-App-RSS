@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from datetime import date
 
 # --- NEW CODE: import and initialize data manager and login manager ---
 from utils.data_manager import DataManager
@@ -32,6 +33,11 @@ pg_sixth = st.Page("views/Molaremasserechner.py", title="Molare Massen Rechner",
 pg_seventh = st.Page("views/pH_Werte_Rechner.py", title="pH-Rechner", icon=":material/info:")
 pg_eighth = st.Page("views/Titer.py", title="Titer-Rechner", icon=":material/info:")
 pg_ninth = st.Page("views/Verdünngsrechner.py", title="Verdünngsrechner", icon=":material/info:")
+pg_tenth = st.Page("views/Einstellungen.py", title="Einstellungen", icon=":material/settings:")
 
-pg = st.navigation([pg_home, pg_second, pg_third, pg_fourth, pg_fifth, pg_sixth, pg_seventh, pg_eighth, pg_ninth])
+pg = st.navigation([pg_home, pg_second, pg_third, pg_fourth, pg_fifth, pg_sixth, pg_seventh, pg_eighth, pg_ninth, pg_tenth])
 pg.run()
+
+
+
+
