@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 from views.Hilfefenster import show_help, show_navigation
 
-
+show_navigation(current_page="Konzentrationsrechner") 
 st.title("Periodensystem")
 
 html_code = """
