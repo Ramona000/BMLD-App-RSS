@@ -15,9 +15,17 @@ login_manager.login_register()             # stops if not logged in
 # --- END OF NEW CODE ---
 
 # --- CODE UPDATE: load user data from data manager if not already present in session state --
-if 'data_df' not in st.session_state:
-    st.session_state['data_df'] = data_manager.load_user_data(
-        'data.csv',                     # The file on switch drive where the data is stored
+if 'resultate_ph_rechner' not in st.session_state:
+    st.session_state['resultate_ph_rechner'] = data_manager.load_user_data(
+        'ph_rechner.csv',                     # The file on switch drive where the data is stored
+        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
+        parse_dates=['timestamp']       # Parse timestamp as datetime
+    )
+# --- END OF CODE UPDATE ---
+# --- CODE UPDATE: load user data from data manager if not already present in session state --
+if 'resultate_mm_rechner' not in st.session_state:
+    st.session_state['resultate_mm_rechner'] = data_manager.load_user_data(
+        'mm_rechner.csv',                     # The file on switch drive where the data is stored
         initial_value=pd.DataFrame(),   # Initial value if the file does not exist
         parse_dates=['timestamp']       # Parse timestamp as datetime
     )

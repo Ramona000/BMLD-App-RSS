@@ -6,35 +6,15 @@ import pytz
 from utils.data_manager import DataManager  # --- NEW CODE: import data manager ---
 import altair as alt
 from views.Hilfefenster import show_help, show_navigation
+from functions.ph_Rechner import calculate_ph
 
 show_navigation(current_page="pH_Werte_Rechner") 
 
 # --- NEW CODE: initialize the session state for the history DataFrame ---
-if 'data_df' not in st.session_state:
-    st.session_state['data_df'] = pd.DataFrame(columns=['timestamp','Typ', 'Konzentration (mol/L)','pH', 'Kategorie'])
+if 'resultate_ph_rechner' not in st.session_state:
+    st.session_state['resultate_ph_rechner'] = pd.DataFrame(columns=['timestamp','Typ', 'Konzentration (mol/L)','pH', 'Kategorie'])
 
-def calculate_ph(typ, konzentration):
 
-    if typ == "starke Säure":
-        pH = -math.log10(konzentration)
-    else:
-        pOH = -math.log10(konzentration)
-        pH = 14 - pOH
-
-    if pH < 7:
-        category = "sauer"
-    elif pH == 7:
-        category = "neutral"
-    else:
-        category = "basisch"
-
-    return {
-        "timestamp": datetime.now(pytz.timezone("Europe/Zurich")),
-        "Typ": typ,
-        "Konzentration (mol/L)": konzentration,
-        "pH": round(pH, 2),
-        "Kategorie": category
-    }
 st.title("pH-Rechner")
 
 st.write("Berechnet deine pH-Werte für dich.\n\nPflichtfelder sind mit einem Sternchen (*) gekennzeichnet und müssen für optimale Berechnungen ausgefüllt werden :)")
@@ -59,22 +39,22 @@ if submitted:
     st.info(f"Die Lösung ist {result['Kategorie']}.")
 
  # --- NEW CODE to update history in session state and display it ---
-    st.session_state['data_df'] = pd.concat([st.session_state['data_df'], pd.DataFrame([result])], ignore_index=True)
+    st.session_state['resultate_ph_rechner'] = pd.concat([st.session_state['resultate_ph_rechner'], pd.DataFrame([result])], ignore_index=True)
  
   # --- CODE UPDATE: save data to data manager ---
     data_manager = DataManager()
-    data_manager.save_user_data(st.session_state['data_df'], 'data.csv')
+    data_manager.save_user_data(st.session_state['resultate_ph_rechner'], 'data.csv')
     # --- END OF CODE UPDATE ---
 
 st.subheader("Berechnungshistorie")       
 # --- NEW CODE to display the history table ---
-st.dataframe(st.session_state['data_df'])
+st.dataframe(st.session_state['resultate_ph_rechner'])
 
 
 
 # --- NEW CODE to create and display the Altair chart ---
-if not st.session_state['data_df'].empty:
-    df = st.session_state['data_df'].copy()
+if not st.session_state['resultate_ph_rechner'].empty:
+    df = st.session_state['resultate_ph_rechner'].copy()
 
     # 1. Hintergrund-Zonen definieren (Sauer, Neutral, Basisch)
     zones_data = pd.DataFrame([
