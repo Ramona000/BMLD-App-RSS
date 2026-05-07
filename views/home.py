@@ -1,4 +1,5 @@
 import streamlit as st
+from functions import show_header
 
 # STYLE
 st.markdown("""
@@ -13,7 +14,7 @@ div.stButton > button {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🧪 Laborrechner")
+show_header("🧪 Laborrechner") #Titel und Avatar anzeigen
 st.write("Wähle einen Rechner oder eine Funktion:")
 
 col1, col2 = st.columns(2)

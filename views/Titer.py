@@ -1,10 +1,11 @@
 import streamlit as st
 from views.Hilfefenster import show_help, show_navigation
 import streamlit as st
+from functions import show_header
 
 
 show_navigation(current_page="Titer") 
-st.title("Titer-Rechner")
+show_header("Titer-Rechner") #Titel und Avatar anzeigen
 
 c_soll = st.number_input("Soll-Konzentration (mol/L)", min_value=0.0, format="%.6f")
 c_eff = st.number_input("Effektive Konzentration (mol/L)", min_value=0.0, format="%.6f")

@@ -7,6 +7,7 @@ from utils.data_manager import DataManager  # --- NEW CODE: import data manager 
 import altair as alt
 from views.Hilfefenster import show_help, show_navigation
 from functions.ph_Rechner import calculate_ph
+from functions import show_header
 
 show_navigation(current_page="pH_Werte_Rechner") 
 
@@ -14,8 +15,8 @@ show_navigation(current_page="pH_Werte_Rechner")
 if 'resultate_ph_rechner' not in st.session_state:
     st.session_state['resultate_ph_rechner'] = pd.DataFrame(columns=['timestamp','Typ', 'Konzentration (mol/L)','pH', 'Kategorie'])
 
+show_header("pH-Rechner") #Titel und Avatar anzeigen
 
-st.title("pH-Rechner")
 
 st.write("Berechnet deine pH-Werte für dich.\n\nPflichtfelder sind mit einem Sternchen (*) gekennzeichnet und müssen für optimale Berechnungen ausgefüllt werden :)")
 

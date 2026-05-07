@@ -6,6 +6,7 @@ from datetime import date
 from utils.data_manager import DataManager
 from utils.login_manager import LoginManager
 
+
 data_manager = DataManager(       # initialize data manager
     fs_protocol='webdav',         # protocol for the filesystem, use webdav for switch drive
     fs_root_folder="App"  # folder on switch drive where the data is stored

@@ -1,10 +1,10 @@
 import streamlit as st
 from views.Hilfefenster import show_help, show_navigation
-import streamlit as st
+from functions import show_header
 
 
+show_header("Einheitenumrechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Einheitenumrechner") 
-st.title("Einheitenumrechner")
 st.write("Hier kannst du verschiedene Einheiten umrechnen. Wähle die Kategorie und die Einheiten aus, die du umrechnen möchtest.")
 
 

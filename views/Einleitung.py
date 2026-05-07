@@ -1,7 +1,8 @@
 import streamlit as st
 from views.Hilfefenster import show_help, show_navigation
+from functions import show_header
 
-st.title ("Einleitung")
+show_header("Einleitung") #Titel und Avatar anzeigen
 st.write ("Der Laborrechner ist eine kompakte App für schnelle und präzise Berechnungen im Laboralltag.\n\n"   
            "Wusstest du schon: Häufig genutzte Bezeichnungen können als Favorit gespeichert werden!")
 

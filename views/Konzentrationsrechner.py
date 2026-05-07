@@ -1,8 +1,9 @@
 import streamlit as st
 from views.Hilfefenster import show_help, show_navigation
+from functions import show_header
 
+show_header("🧪 Konzentrationsrechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Konzentrationsrechner") 
-st.title("🧪 Konzentrationsrechner")
 
 st.write("Berechne die molare Konzentration (c = n / V)")
 

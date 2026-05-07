@@ -5,9 +5,11 @@ import periodictable as pt
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 import pandas as pd
+from functions import show_header
 
+show_header("Molare Masse-Rechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Molaremasserechner") 
-st.title ("Molaremasse-Rechner")
+
 
 if 'resultate_mm_rechner' not in st.session_state:
     st.session_state['resultate_mm_rechner'] = pd.DataFrame(columns=['timestamp','Molekül', 'Molare Masse (g/mol)'])
