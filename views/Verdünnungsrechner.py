@@ -6,6 +6,14 @@ from utils.data_manager import DataManager
 from functions.Verdünnungsrechner import verduennungsrechner, plot_verduennung
 from functions import show_header
 
+if 'resultate_verdünnungs_rechner' not in st.session_state:
+    st.session_state['resultate_verdünnungs_rechner'] = pd.DataFrame(columns=["timestamp","C1","C2","V2","V1"])
+    # Nur gewünschte Spalten behalten
+st.session_state['resultate_verdünnungs_rechner'] = (
+    st.session_state['resultate_verdünnungs_rechner']
+    .reindex(columns=["timestamp","C1","C2","V2","V1"])
+)
+
 show_header("Verdünnungsrechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Verdünngsrechner") 
 
@@ -13,12 +21,11 @@ C1 = st.number_input("Anfangskonzentration (C1)", min_value=0.01)
 C2 = st.number_input("Zielkonzentration (C2)", min_value=0.01)
 V2 = st.number_input("Endvolumen (V2)", min_value=0.01)
 
-if "data_df" not in st.session_state:
-    st.session_state["data_df"] = pd.DataFrame(columns=["timestamp","C1","C2","V2","V1"])
 
 if st.button("Berechnen"):
 
     if C1 > 0 and C2 > 0 and V2 > 0:
+
         result = verduennungsrechner(C1, C2, V2)
 
         st.success(f"V1: {result['V1']} ml")
@@ -28,18 +35,30 @@ if st.button("Berechnen"):
 
         result["timestamp"] = datetime.datetime.now()
 
-        st.session_state['data_df'] = pd.concat(
-            [st.session_state['data_df'], pd.DataFrame([result])],
+
+        # In Verlauf speichern
+        st.session_state['resultate_verdünnungs_rechner'] = pd.concat(
+            [
+                st.session_state['resultate_verdünnungs_rechner'],
+                pd.DataFrame([result])
+            ],
             ignore_index=True
+        )
+
+        # CSV speichern
+        data_manager = DataManager()
+        data_manager.save_user_data(
+            st.session_state['resultate_verdünnungs_rechner'],
+            'data.csv'
         )
 
     else:
         st.error("Fehlerhafte Eingabe")
 
-data_manager = DataManager()
-data_manager.save_user_data(st.session_state['data_df'], 'data.csv')
+st.subheader("Berechnungshistorie")       
+# --- NEW CODE to display the history table ---
+st.dataframe(st.session_state['resultate_verdünnungs_rechner'])
 
-st.dataframe(st.session_state['data_df'])
 
 # Spezifischer Hilfetext für Verdünnungsrechner
 help_text = [

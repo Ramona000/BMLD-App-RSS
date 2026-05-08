@@ -22,8 +22,8 @@ if 'resultate_ph_rechner' not in st.session_state:
         initial_value=pd.DataFrame(),   # Initial value if the file does not exist
         parse_dates=['timestamp']       # Parse timestamp as datetime
     )
-# --- END OF CODE UPDATE ---
-# --- CODE UPDATE: load user data from data manager if not already present in session state --
+
+
 if 'resultate_mm_rechner' not in st.session_state:
     st.session_state['resultate_mm_rechner'] = data_manager.load_user_data(
         'mm_rechner.csv',                     # The file on switch drive where the data is stored
@@ -31,7 +31,33 @@ if 'resultate_mm_rechner' not in st.session_state:
         parse_dates=['timestamp']       # Parse timestamp as datetime
     )
 # --- END OF CODE UPDATE ---
+if 'resultate_verdünnungs_rechner' not in st.session_state:
+    st.session_state['resultate_verdünnungs_rechner'] = data_manager.load_user_data(
+        'verdünnungs_rechner.csv',                     # The file on switch drive where the data is stored
+        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
+        parse_dates=['timestamp']       # Parse timestamp as datetime
+    )
+# --- Bis hier hin ist Historie bereits eingefügt ---
+if 'resultate_titer_rechner' not in st.session_state:
+    st.session_state['resultate_titer_rechner'] = data_manager.load_user_data(
+        'titer_rechner.csv',                     # The file on switch drive where the data is stored
+        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
+        parse_dates=['timestamp']       # Parse timestamp as datetime
+    )
 
+if 'resultate_konzentrations_rechner' not in st.session_state:
+    st.session_state['resultate_konzentrations_rechner'] = data_manager.load_user_data(
+        'konzentrations_rechner.csv',                     # The file on switch drive where the data is stored
+        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
+        parse_dates=['timestamp']       # Parse timestamp as datetime
+    )
+
+if 'resultate_einheitenumrechner' not in st.session_state:
+    st.session_state['resultate_einheitenumrechner'] = data_manager.load_user_data(
+        'einheitenumrechner.csv',                     # The file on switch drive where the data is stored
+        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
+        parse_dates=['timestamp']       # Parse timestamp as datetime
+    )
 
 pg_home = st.Page("views/home.py", title="Startseite", icon=":material/home:", default=True)
 pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/info:")

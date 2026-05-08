@@ -1,7 +1,13 @@
+from unittest import result
+
 import streamlit as st
+from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
-import streamlit as st
 from functions import show_header
+import pandas as pd
+
+if 'resultate_titer_rechner' not in st.session_state:
+    st.session_state['resultate_titer_rechner'] = pd.DataFrame(columns=["timestamp","c_soll","c_eff","titer"])
 
 
 show_navigation(current_page="Titer") 
@@ -22,18 +28,42 @@ if st.button("Titer berechnen"):
     try:
         titer = berechne_titer(c_soll, c_eff)
         st.success(f"Der berechnete Titer beträgt: {titer:.6f}")
+
+        # Interpretation
+        if titer > 1:
+            st.success("Lösung ist stärker als erwartet")
+        elif titer < 1:
+            st.warning("Lösung ist schwächer als erwartet")
+        else:
+            st.info("Lösung ist genau richtig")
+
+        # Verlauf speichern
+        st.session_state['resultate_titer_rechner'] = pd.concat(
+            [
+                st.session_state['resultate_titer_rechner'],
+                pd.DataFrame([{
+                    "timestamp": pd.Timestamp.now(),
+                    "c_soll": c_soll,
+                    "c_eff": c_eff,
+                    "titer": titer
+                }])
+            ],
+            ignore_index=True
+        )
+
+        # CSV speichern
+        data_manager = DataManager()
+        data_manager.save_user_data(
+            st.session_state['resultate_titer_rechner'],
+            'titer_rechner.csv'
+        )
+
     except ValueError as e:
         st.error(str(e))
 
-#Interpretation
-    if titer > 1:
-        st.success("Lösung ist stärker als erwartet")
-    elif titer < 1:
-        st.warning("Lösung ist schwächer als erwartet")
-    else:
-        st.info("Lösung ist genau richtig")
-
-
+st.subheader("Berechnungshistorie")       
+# --- NEW CODE to display the history table ---
+st.dataframe(st.session_state['resultate_titer_rechner'])
 
 # Spezifischer Hilfetext für Titer
 help_text = [

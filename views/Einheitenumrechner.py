@@ -1,7 +1,17 @@
+import pandas as pd
 import streamlit as st
+from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
 
+if 'resultate_einheitenumrechner' not in st.session_state:
+    st.session_state['resultate_einheitenumrechner'] = pd.DataFrame(columns=["timestamp",
+        "kategorie",
+        "eingabewert",
+        "eingabeeinheit",
+        "ausgabewert",
+        "ausgabeeinheit",
+        "substanz"])
 
 show_header("Einheitenumrechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Einheitenumrechner") 
@@ -253,8 +263,31 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
                 ergebnis = volumen_ml
             
             st.success(f"{volumen} {von_einheit} = {ergebnis:.10g} {zu_einheit}")
+                # Verlauf speichern
+        st.session_state['resultate_einheitenumrechner'] = pd.concat(
+            [
+                st.session_state['resultate_einheitenumrechner'],
+                pd.DataFrame([{
+                    "timestamp": pd.Timestamp.now(),
+                    "kategorie": kategorie,
+                    "eingabewert": volumen,
+                    "eingabeeinheit": von_einheit,
+                    "ausgabewert": ergebnis,
+                    "ausgabeeinheit": zu_einheit,
+                    "substanz": substanz
+                }])
+            ],
+            ignore_index=True
+        )
+                # CSV speichern
+        data_manager = DataManager()
+        data_manager.save_user_data(
+            st.session_state['resultate_einheitenumrechner'],
+            'data.csv'
+        )
 # ... bestehender Code ...
-
+st.subheader("Berechnungshistorie")
+st.dataframe(st.session_state['resultate_einheitenumrechner'])
 
 # ... Rest des Codes, inkl. col1, col2 für Hilfe und Zur Startseite ...
 col1, col2 = st.columns([1, 1])
