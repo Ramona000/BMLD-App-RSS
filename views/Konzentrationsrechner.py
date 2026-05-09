@@ -4,7 +4,11 @@ import streamlit as st
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
-
+from functions.Konzentrationsrechner import (
+    berechne_konzentration,
+    erstelle_verlaufseintrag,
+    validiere_eingaben
+)
 # Session State initialisieren
 if 'resultate_konzentrations_rechner' not in st.session_state:
     st.session_state['resultate_konzentrations_rechner'] = pd.DataFrame(
@@ -24,32 +28,27 @@ konzentration = None
 
 # Berechnung
 if st.button("Berechnen"):
-    if volumen > 0:
-        konzentration = stoffmenge / volumen
+    ok, msg = validiere_eingaben(stoffmenge, volumen)
+
+    if not ok:
+        st.warning(msg)
+    else:
+        konzentration = berechne_konzentration(stoffmenge, volumen)
         st.success(f"Konzentration: {konzentration:.4f} mol/L")
 
-        # Verlauf speichern
         st.session_state['resultate_konzentrations_rechner'] = pd.concat(
             [
                 st.session_state['resultate_konzentrations_rechner'],
-                pd.DataFrame([{
-                    "timestamp": pd.Timestamp.now(),
-                    "stoffmenge": stoffmenge,
-                    "volumen": volumen,
-                    "konzentration": konzentration
-                }])
+                erstelle_verlaufseintrag(stoffmenge, volumen, konzentration)
             ],
             ignore_index=True
         )
 
-        # CSV speichern
         data_manager = DataManager()
         data_manager.save_user_data(
             st.session_state['resultate_konzentrations_rechner'],
             'data.csv'
         )
-    else:
-        st.warning("Bitte ein Volumen größer als 0 eingeben!")
 
 st.subheader("Berechnungshistorie")
 st.dataframe(st.session_state['resultate_konzentrations_rechner'])
