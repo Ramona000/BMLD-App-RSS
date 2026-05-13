@@ -3,16 +3,19 @@ import pandas as pd
 import datetime
 from views.Hilfefenster import show_help, show_navigation
 from utils.data_manager import DataManager
-from functions.Verdünnungsrechner import verduennungsrechner, plot_verduennung
+from functions.Verdünnungsrechner import verduennungsrechner, plot_verduennung, speichere_verlauf
 from functions import show_header
+import os
 
-if 'resultate_verdünnungs_rechner' not in st.session_state:
-    st.session_state['resultate_verdünnungs_rechner'] = pd.DataFrame(columns=["timestamp","C1","C2","V2","V1"])
-    # Nur gewünschte Spalten behalten
-st.session_state['resultate_verdünnungs_rechner'] = (
-    st.session_state['resultate_verdünnungs_rechner']
-    .reindex(columns=["timestamp","C1","C2","V2","V1"])
-)
+FILE_PATH = "verdünnungs_verlauf.csv"
+
+if "resultate_verdünnungs_rechner" not in st.session_state:
+    if os.path.exists(FILE_PATH):
+        st.session_state["resultate_verdünnungs_rechner"] = pd.read_csv(FILE_PATH)
+    else:
+        st.session_state["resultate_verdünnungs_rechner"] = pd.DataFrame(
+            columns=["timestamp", "C1", "C2", "V2", "V1", "favorite"]
+        )
 
 show_header("Verdünnungsrechner") #Titel und Avatar anzeigen
 show_navigation(current_page="Verdünngsrechner") 
@@ -32,18 +35,7 @@ if st.button("Berechnen"):
 
         fig = plot_verduennung(C1, C2, V2, result["V1"])
         st.pyplot(fig)
-
-        result["timestamp"] = datetime.datetime.now()
-
-
-        # In Verlauf speichern
-        st.session_state['resultate_verdünnungs_rechner'] = pd.concat(
-            [
-                st.session_state['resultate_verdünnungs_rechner'],
-                pd.DataFrame([result])
-            ],
-            ignore_index=True
-        )
+        speichere_verlauf(result)
 
         # CSV speichern
         data_manager = DataManager()
@@ -57,7 +49,15 @@ if st.button("Berechnen"):
 
 st.subheader("Berechnungshistorie")       
 # --- NEW CODE to display the history table ---
-st.dataframe(st.session_state['resultate_verdünnungs_rechner'])
+st.session_state['resultate_verdünnungs_rechner']["favorite"] = (
+    st.session_state['resultate_verdünnungs_rechner']["favorite"]
+    .fillna(False)
+    .astype(bool)
+)
+st.session_state['resultate_verdünnungs_rechner'] = st.data_editor(
+    st.session_state['resultate_verdünnungs_rechner'],
+    use_container_width=True
+)
 
 
 # Spezifischer Hilfetext für Verdünnungsrechner

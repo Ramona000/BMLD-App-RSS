@@ -1,78 +1,105 @@
-
 import streamlit as st
 import re
 import periodictable as pt
+import pandas as pd
+
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
-import pandas as pd
 from functions import show_header
-from functions.Molaremassenrechner import parse_formula, get_atomic_mass, calculate_molar_mass
+from functions.Molaremassenrechner import (
+    parse_formula,
+    calculate_molar_mass,
+    speichere_verlauf
+)
 
-show_header("Molare Masse-Rechner") #Titel und Avatar anzeigen
-show_navigation(current_page="Molaremasserechner") 
+# HEADER
+show_header("Molare Masse-Rechner")
+show_navigation(current_page="Molaremasserechner")
 
+# SESSION STATE INIT
+if "resultate_mm_rechner" not in st.session_state:
+    st.session_state["resultate_mm_rechner"] = pd.DataFrame(
+        columns=[
+            "timestamp",
+            "Molekül",
+            "Molare Masse (g/mol)",
+            "favorite"
+        ]
+    )
 
-if 'resultate_mm_rechner' not in st.session_state:
-    st.session_state['resultate_mm_rechner'] = pd.DataFrame(columns=['timestamp','Molekül', 'Molare Masse (g/mol)'])
+df = st.session_state["resultate_mm_rechner"]
 
-formula = st.text_input("Gib eine chemische Formel ein. \n\n Formel muss in Grossbuchstaben geschrieben werden! (z.B. H2O):")
-#Berechnungsbutton
+# INPUT
+formula = st.text_input(
+    "Gib eine chemische Formel ein.\n\n"
+    "Formel muss in Grossbuchstaben sein (z.B. H2O):"
+)
+
 calculate = st.button("Berechnen")
 
 if formula:
     st.write(f"Eingegebene Formel: {formula}")
 
-#Anzeigen im streamlit
+# CALCULATION
 if calculate:
     if not formula:
         st.warning("Bitte gib eine Formel ein!")
     else:
         composition = parse_formula(formula)
-        
         st.write("Zusammensetzung:", composition)
-        
+
         molar_mass = calculate_molar_mass(composition)
-        
+
         if molar_mass:
             st.success(f"Molare Masse: {molar_mass:.3f} g/mol")
-           
-            from datetime import datetime
 
-            result = {
-                "timestamp": datetime.now(),
-                "Molekül": formula,
-                "Molare Masse (g/mol)": round(molar_mass, 3)
-            }
+            # 🔥 wichtig: Verlauf speichern muss favorite enthalten
+            speichere_verlauf(formula, molar_mass)
 
-            st.session_state['resultate_mm_rechner'] = pd.concat(
-                [st.session_state['resultate_mm_rechner'], pd.DataFrame([result])],
-                ignore_index=True
-            )
+            # CSV speichern
             data_manager = DataManager()
-            data_manager.save_user_data(st.session_state['resultate_mm_rechner'], 'data.csv')
+            data_manager.save_user_data(df, "data.csv")
         else:
             st.error("Unbekanntes Element!")
- 
-   
 
-st.subheader("Berechnungshistorie")       
-# --- NEW CODE to display the history table ---
+# HISTORY
+st.subheader("Berechnungshistorie")
 
+df = st.session_state["resultate_mm_rechner"]
 
+# 🔥 FIX: favorite Spalte absichern
+if "favorite" not in df.columns:
+    df["favorite"] = False
+else:
+    df["favorite"] = df["favorite"].fillna(False).astype(bool)
 
-# --- NEW CODE to create and display the Altair chart ---
-if not st.session_state['resultate_mm_rechner'].empty:
-    df = st.session_state['resultate_mm_rechner']
-    st.dataframe(df, hide_index=True)
-# Spezifischer Hilfetext für Molare Masse
+# DATA EDITOR (SAFE VERSION)
+edited_df = st.data_editor(
+    df,
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=[
+        "timestamp",
+        "Molekül",
+        "Molare Masse (g/mol)"
+    ],
+    hide_index=True,
+    use_container_width=True
+)
+
+st.session_state["resultate_mm_rechner"] = edited_df
+
+# HELP SECTION
 help_text = [
-    "Gib eine chemische Formel in Grossbuchstaben ein z.B. C6H12O6 für Glucose.",
+    "Gib eine chemische Formel ein z.B. C6H12O6 für Glucose.",
     "Klicke auf Berechnen, um die molare Masse zu erhalten.",
-    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "Wenn es nicht klappt: ChatGPT fragen 😄",
     "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
 col1, col2 = st.columns([1, 1])
+
 with col1:
     if st.button("Zur Startseite"):
         st.switch_page("pages/home.py")

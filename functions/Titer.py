@@ -32,7 +32,8 @@ def speichere_titer(c_soll, c_eff, titer):
         "timestamp": pd.Timestamp.now(),
         "c_soll": c_soll,
         "c_eff": c_eff,
-        "titer": titer
+        "titer": titer,
+        "favorite": False
     }])
 
     # sicherstellen, dass DataFrame existiert

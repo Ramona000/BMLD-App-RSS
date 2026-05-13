@@ -11,7 +11,8 @@ def erstelle_verlaufseintrag(stoffmenge, volumen, konzentration):
         "timestamp": pd.Timestamp.now(),
         "stoffmenge": stoffmenge,
         "volumen": volumen,
-        "konzentration": konzentration
+        "konzentration": konzentration,
+        "favorite": False
     }])
 
 def speichere_verlauf(data_manager, dataframe, filename="data.csv"):

@@ -100,7 +100,8 @@ def speichere_historie(
         "ausgabeeinheit": ausgabeeinheit,
         "substanz_kategorie": substanz_kategorie,
         "substanz": substanz,
-        "dichte": dichte
+        "dichte": dichte,
+        "favorite": False
     }])
 
     if "resultate_einheitenumrechner" not in st.session_state:

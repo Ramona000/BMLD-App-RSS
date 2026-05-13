@@ -1,133 +1,167 @@
-import pandas as pd  # --- NEW CODE: add pandas to the imports ---
+import pandas as pd
 import streamlit as st
 import math
+import os
+import altair as alt
 from datetime import datetime
 import pytz
-from utils.data_manager import DataManager  # --- NEW CODE: import data manager ---
-import altair as alt
+
+from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions.ph_Rechner import calculate_ph
 from functions import show_header
 
-show_navigation(current_page="pH_Werte_Rechner") 
+# PAGE SETUP
+show_navigation(current_page="pH_Werte_Rechner")
+show_header("pH-Rechner")
 
-# --- NEW CODE: initialize the session state for the history DataFrame ---
-if 'resultate_ph_rechner' not in st.session_state:
-    st.session_state['resultate_ph_rechner'] = pd.DataFrame(columns=['timestamp','Typ', 'Konzentration (mol/L)','pH', 'Kategorie'])
+st.write(
+    "Berechnet deine pH-Werte für dich.\n\n"
+    "Pflichtfelder sind mit einem Sternchen (*) gekennzeichnet."
+)
 
-show_header("pH-Rechner") #Titel und Avatar anzeigen
+# FILE PATH
+FILE_PATH = "ph_verlauf.csv"
 
+# SESSION STATE INIT
+if "resultate_ph_rechner" not in st.session_state:
+    if os.path.exists(FILE_PATH):
+        st.session_state["resultate_ph_rechner"] = pd.read_csv(FILE_PATH)
+    else:
+        st.session_state["resultate_ph_rechner"] = pd.DataFrame(
+            columns=[
+                "timestamp",
+                "Typ",
+                "Konzentration (mol/L)",
+                "pH",
+                "Kategorie",
+                "favorite"
+            ]
+        )
 
-st.write("Berechnet deine pH-Werte für dich.\n\nPflichtfelder sind mit einem Sternchen (*) gekennzeichnet und müssen für optimale Berechnungen ausgefüllt werden :)")
+# SPEICHER-FUNKTION (HYBRID)
+def speichere_verlauf_ph(result):
+    """
+    Hybrid-Speicher:
+    - Session-State
+    - CSV persistent
+    """
 
-pH = None 
+    result = result.copy()
 
+    result["timestamp"] = datetime.now(pytz.timezone("Europe/Zurich"))
+    result["favorite"] = False
+
+    neuer_eintrag = pd.DataFrame([result])
+
+    # CSV laden oder erstellen
+    if os.path.exists(FILE_PATH):
+        df = pd.read_csv(FILE_PATH)
+    else:
+        df = pd.DataFrame(columns=neuer_eintrag.columns)
+
+    # anhängen
+    df = pd.concat([df, neuer_eintrag], ignore_index=True)
+
+    # speichern
+    df.to_csv(FILE_PATH, index=False)
+
+    # session sync
+    st.session_state["resultate_ph_rechner"] = df
+
+    return df
+
+# INPUT FORM
 with st.form("pH_form"):
-    typ= st.selectbox("Wähle deinen Lösungstyp", ["starke Säure", "starke Base"])
+    typ = st.selectbox("Wähle deinen Lösungstyp", ["starke Säure", "starke Base"])
 
     konzentration = st.number_input(
-    "Konzentration (mol/L)*",
-    min_value=0.000001,
-    format="%.6f")
+        "Konzentration (mol/L)*",
+        min_value=0.000001,
+        format="%.6f"
+    )
 
     submitted = st.form_submit_button("pH-Wert berechnen")
 
+# CALCULATION
 if submitted:
     result = calculate_ph(typ, konzentration)
 
-    st.success(f"Der pH-Wert der Lösung beträgt: {result['pH']}")
-
+    st.success(f"Der pH-Wert beträgt: {result['pH']}")
     st.info(f"Die Lösung ist {result['Kategorie']}.")
 
- # --- NEW CODE to update history in session state and display it ---
-    st.session_state['resultate_ph_rechner'] = pd.concat([st.session_state['resultate_ph_rechner'], pd.DataFrame([result])], ignore_index=True)
- 
-  # --- CODE UPDATE: save data to data manager ---
-    data_manager = DataManager()
-    data_manager.save_user_data(st.session_state['resultate_ph_rechner'], 'data.csv')
-    # --- END OF CODE UPDATE ---
+    speichere_verlauf_ph(result)
 
-st.subheader("Berechnungshistorie")       
-# --- NEW CODE to display the history table ---
-st.dataframe(st.session_state['resultate_ph_rechner'])
+# HISTORY TABLE
+st.subheader("Berechnungshistorie")
 
+df = st.session_state["resultate_ph_rechner"]
 
+# safety
+if "favorite" not in df.columns:
+    df["favorite"] = False
 
-# --- NEW CODE to create and display the Altair chart ---
-if not st.session_state['resultate_ph_rechner'].empty:
-    df = st.session_state['resultate_ph_rechner'].copy()
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
 
-    # 1. Hintergrund-Zonen definieren (Sauer, Neutral, Basisch)
-    zones_data = pd.DataFrame([
-        {"start": 0, "end": 6.5, "name": "sauer", "color": "#ffcccc"},   # Hellrot
-        {"start": 6.5, "end": 7.5, "name": "neutral", "color": "#e2f0d9"}, # Hellgrün
-        {"start": 7.5, "end": 14, "name": "basisch", "color": "#ccd9ff"}  # Hellblau
+st.dataframe(df)
+
+# CHART
+if not df.empty:
+    df = df.copy()
+    df["timestamp"] = pd.to_datetime(df["timestamp"])
+
+    zones = pd.DataFrame([
+        {"start": 0, "end": 6.5, "color": "#ffcccc"},
+        {"start": 6.5, "end": 7.5, "color": "#e2f0d9"},
+        {"start": 7.5, "end": 14, "color": "#ccd9ff"}
     ])
 
-    zones = alt.Chart(zones_data).mark_rect(opacity=0.3).encode(
-        y='start:Q',
-        y2='end:Q',
-        color=alt.Color('color:N', scale=None) 
+    background = alt.Chart(zones).mark_rect(opacity=0.3).encode(
+        y="start:Q",
+        y2="end:Q",
+        color=alt.Color("color:N", scale=None)
     )
 
-    # 2. Basis-Chart (Achsen-Definition)
     base = alt.Chart(df).encode(
-        x=alt.X(
-            'timestamp:T', 
-            title='Zeitpunkt der Messung',
-            axis=alt.Axis(format='%d.%m. %H:%M', labelAngle=-45)
-        ), # Formatiert als 20.03. 14:00,
-        y=alt.Y(
-            'pH:Q', 
-            scale=alt.Scale(domain=[0, 14]), 
-            title='pH-Wert'
-        ),
-        color=alt.Color('Typ:N', 
-                        scale=alt.Scale(domain=['starke Säure', 'starke Base'], 
-                                       range=['#d62728', '#1f77b4']),
-                        legend=alt.Legend(title="Lösungstyp")
+        x=alt.X("timestamp:T", title="Zeitpunkt"),
+        y=alt.Y("pH:Q", scale=alt.Scale(domain=[0, 14])),
+        color=alt.Color(
+            "Typ:N",
+            scale=alt.Scale(
+                domain=["starke Säure", "starke Base"],
+                range=["#d62728", "#1f77b4"]
+            )
         )
     )
 
-    # 3. Daten-Layer: Punkte und Verbindungslinien
-    points = base.mark_point(size=100, filled=True)
-    lines = base.mark_line(strokeWidth=2)
+    points = base.mark_point(size=100)
+    lines = base.mark_line()
 
-    # Tooltips hinzufügen
-    chart_elements = (points + lines).encode(
-        tooltip=[
-            alt.Tooltip('timestamp:T', title='Zeit', format='%H:%M:%S'),
-            alt.Tooltip('Typ:N'),
-            alt.Tooltip('Konzentration (mol/L):Q'),
-            alt.Tooltip('pH:Q')
-        ]
-    )
-
-    # 4. Alles kombinieren und anzeigen
-    final_chart = alt.layer(zones, chart_elements).properties(
-        title='Zeitlicher Verlauf der pH-Messungen',
+    chart = alt.layer(
+        background,
+        (points + lines)
+    ).properties(
         width=700,
-        height=400
+        height=400,
+        title="pH-Verlauf"
     ).interactive()
 
-    st.altair_chart(final_chart, use_container_width=True)
-    
+    st.altair_chart(chart, use_container_width=True)
 
-# Spezifischer Hilfetext für pH-Werte Rechner
+# HELP
 help_text = [
-    "Wähle den Lösungstyp (starke Säure oder starke Base) aus.",
-    "Gib die Konzentration in mol/L ein.",
-    "Klicke auf 'pH-Wert berechnen', um das Ergebnis zu erhalten.",
-    "Die Berechnungshistorie zeigt alle vorherigen Berechnungen in einer Tabelle.",
-    "Der Chart visualisiert den zeitlichen Verlauf der pH-Werte mit farbigen Zonen (sauer, neutral, basisch).",
-    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "Wähle Säure oder Base",
+    "Gib Konzentration ein",
+    "Klicke Berechnen",
+    "Chart zeigt Verlauf",
     "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns(2)
+
 with col1:
     if st.button("Zur Startseite"):
         st.switch_page("views/home.py")
 
 with col2:
-    show_help(title="Hilfe zum pH-Rechner", text_lines=help_text)
+    show_help("Hilfe zum pH-Rechner", help_text)
