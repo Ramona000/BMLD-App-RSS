@@ -2,6 +2,7 @@
 
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # FAKTOREN
 gewicht_faktoren = {
@@ -114,3 +115,21 @@ def speichere_historie(
             ],
             ignore_index=True
         )
+
+#Grafik
+def gewichtseinheiten_balken(gewicht_faktoren):
+
+    einheiten = list(gewicht_faktoren.keys())
+    werte = list(gewicht_faktoren.values())
+
+    fig, ax = plt.subplots()
+
+    ax.bar(einheiten, werte)
+
+    ax.set_yscale("log")
+
+    ax.set_title("Vergleich der Gewichtseinheiten")
+    ax.set_xlabel("Einheiten")
+    ax.set_ylabel("Faktor zu Gramm (logarithmisch)")
+
+    return fig

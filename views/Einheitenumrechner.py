@@ -10,6 +10,7 @@ from functions.Einheitenumrechner import (
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
+from functions.Einheitenumrechner import *
 
 # SESSION STATE
 if "resultate_einheitenumrechner" not in st.session_state:
@@ -221,3 +222,7 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Einheitenumrechner")
+
+st.subheader("Grafische Darstellung")
+
+st.pyplot(gewichtseinheiten_balken(gewicht_faktoren))

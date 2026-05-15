@@ -9,6 +9,7 @@ from functions.Konzentrationsrechner import (
     erstelle_verlaufseintrag,
     validiere_eingaben
 )
+from functions.Konzentrationsrechner import *
 # Session State initialisieren
 if 'resultate_konzentrations_rechner' not in st.session_state:
     st.session_state['resultate_konzentrations_rechner'] = pd.DataFrame(
@@ -67,3 +68,5 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Konzentrationsrechner", text_lines=help_text)
+
+st.pyplot(konzentration_linie())
