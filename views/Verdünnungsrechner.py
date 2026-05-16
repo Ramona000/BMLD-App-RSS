@@ -25,8 +25,9 @@ df["favorite"] = df["favorite"].fillna(False).astype(bool)
 st.session_state["resultate_verdünnungs_rechner"] = df
 
 # HEADER
-show_header("Verdünnungsrechner")
 show_navigation(current_page="Verdünnungsrechner")
+show_header("Verdünnungsrechner")
+
 
 # INPUT
 C1 = st.number_input("Anfangskonzentration (C1)", min_value=0.01)

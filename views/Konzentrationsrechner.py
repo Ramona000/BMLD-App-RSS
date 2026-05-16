@@ -16,8 +16,9 @@ if 'resultate_konzentrations_rechner' not in st.session_state:
         columns=["timestamp", "stoffmenge", "volumen", "konzentration"]
     )
 
-show_header("🧪 Konzentrationsrechner")
 show_navigation(current_page="Konzentrationsrechner")
+show_header("🧪 Konzentrationsrechner")
+
 
 st.write("Berechne die molare Konzentration (c = n / V)")
 

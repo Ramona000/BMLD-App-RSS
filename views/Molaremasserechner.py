@@ -13,8 +13,9 @@ from functions.Molaremassenrechner import (
 )
 
 # HEADER
-show_header("Molare Masse-Rechner")
 show_navigation(current_page="Molaremasserechner")
+show_header("Molare Masse-Rechner")
+
 
 # SESSION STATE INIT
 if "resultate_mm_rechner" not in st.session_state:

@@ -27,8 +27,8 @@ if "resultate_einheitenumrechner" not in st.session_state:
     ])
 
 # HEADER
-show_header("Einheitenumrechner")
 show_navigation(current_page="Einheitenumrechner")
+show_header("Einheitenumrechner")
 
 st.write("Hier kannst du verschiedene Einheiten umrechnen.")
 

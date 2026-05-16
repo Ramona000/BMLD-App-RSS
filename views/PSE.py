@@ -3,8 +3,9 @@ import streamlit.components.v1 as components
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
 
+show_navigation(current_page="PSE") 
 show_header("Periodensystem") #Titel und Avatar anzeigen
-show_navigation(current_page="Konzentrationsrechner") 
+
 
 html_code = """
 <iframe src="https://ptable.com/#Properties"
