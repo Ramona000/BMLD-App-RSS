@@ -9,11 +9,20 @@ from functions.Verdünnungsrechner import (
     plot_verduennung
 )
 
-# SESSION STATE
+# SESSION STATE INIT
 if "resultate_verdünnungs_rechner" not in st.session_state:
     st.session_state["resultate_verdünnungs_rechner"] = pd.DataFrame(
         columns=["timestamp", "C1", "C2", "V2", "V1", "favorite"]
     )
+
+# Safety: favorite immer sicherstellen
+df = st.session_state["resultate_verdünnungs_rechner"]
+
+if "favorite" not in df.columns:
+    df["favorite"] = False
+
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
+st.session_state["resultate_verdünnungs_rechner"] = df
 
 # HEADER
 show_header("Verdünnungsrechner")
@@ -44,21 +53,12 @@ if st.button("Berechnen"):
 # HISTORIE
 st.subheader("Berechnungshistorie")
 
-df = st.session_state["resultate_verdünnungs_rechner"]
-
-if "favorite" not in df.columns:
-    df["favorite"] = False
-
-df["favorite"] = df["favorite"].fillna(False).astype(bool)
-
-st.session_state["resultate_verdünnungs_rechner"] = df
-
 st.data_editor(
     st.session_state["resultate_verdünnungs_rechner"],
     use_container_width=True
 )
 
-# HELP
+# NAVIGATION / HELP
 help_text = [
     "C1 eingeben",
     "C2 eingeben",

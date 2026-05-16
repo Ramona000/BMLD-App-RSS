@@ -1,11 +1,10 @@
-print("Verdünnungsrechner MODULE WIRD GELADEN")
 import pandas as pd
 import streamlit as st
 from datetime import datetime
 import pytz
 import matplotlib.pyplot as plt
 
-
+# BERECHNUNG
 def verduennungsrechner(C1, C2, V2):
     """
     Berechnet Verdünnung: C1 * V1 = C2 * V2
@@ -21,7 +20,7 @@ def verduennungsrechner(C1, C2, V2):
         "V1": round(V1, 2)
     }
 
-
+# SPEICHERN
 def speichere_verlauf(result):
     """
     Speichert Verdünnungsberechnung im Streamlit Session-State
@@ -38,23 +37,15 @@ def speichere_verlauf(result):
 
     if "resultate_verdünnungs_rechner" not in st.session_state:
         st.session_state["resultate_verdünnungs_rechner"] = neuer_eintrag
-
     else:
         df_alt = st.session_state["resultate_verdünnungs_rechner"]
 
         st.session_state["resultate_verdünnungs_rechner"] = pd.concat(
-        [df_alt, neuer_eintrag],
-        ignore_index=True
+            [df_alt, neuer_eintrag],
+            ignore_index=True
         )
 
-# Safety-Net für favorite
-st.session_state["resultate_verdünnungs_rechner"]["favorite"] = (
-    st.session_state["resultate_verdünnungs_rechner"]["favorite"]
-    .fillna(False)
-    .astype(bool)
-)
-
-
+# PLOT
 def plot_verduennung(C1, C2, V2, V1):
     fig, ax = plt.subplots()
 
