@@ -1,9 +1,14 @@
+import math
+import pandas as pd
+import streamlit as st
 from datetime import datetime
 import pytz
-import matplotlib.pyplot as plt
-import math
+
 
 def calculate_ph(typ, konzentration):
+    """
+    Berechnet pH-Wert strukturiert
+    """
 
     if typ == "starke Säure":
         pH = -math.log10(konzentration)
@@ -23,6 +28,29 @@ def calculate_ph(typ, konzentration):
         "Typ": typ,
         "Konzentration (mol/L)": konzentration,
         "pH": round(pH, 2),
-        "Kategorie": category,
-        "favorite": False
+        "Kategorie": category
     }
+
+
+def speichere_verlauf_ph(result):
+    """
+    Speichert pH-Rechner Verlauf in Streamlit Session-State
+    """
+
+    neuer_eintrag = pd.DataFrame([{
+        "timestamp": pd.Timestamp.now(),
+        "Typ": result["Typ"],
+        "Konzentration (mol/L)": result["Konzentration (mol/L)"],
+        "pH": result["pH"],
+        "Kategorie": result["Kategorie"],
+        "favorite": False
+    }])
+
+    if "resultate_ph_rechner" not in st.session_state:
+        st.session_state["resultate_ph_rechner"] = neuer_eintrag
+
+    else:
+        st.session_state["resultate_ph_rechner"] = pd.concat(
+            [st.session_state["resultate_ph_rechner"], neuer_eintrag],
+            ignore_index=True
+        )
