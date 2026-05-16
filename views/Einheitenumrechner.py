@@ -97,6 +97,17 @@ if kategorie == "Flüssigkeiten in Gewicht":
             substanz,
             dichte
         )
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
+        data_manager = DataManager()
+        df = st.session_state["resultate_einheitenumrechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "einheitenumrechner_history.json")
+
 
 # GEWICHT → FLÜSSIGKEIT
 elif kategorie == "Gewicht in Flüssigkeit":
@@ -141,6 +152,17 @@ elif kategorie == "Gewicht in Flüssigkeit":
             substanz,
             dichte
         )
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
+        data_manager = DataManager()
+        df = st.session_state["resultate_einheitenumrechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "einheitenumrechner_history.json")
+
 
 # GEWICHT → GEWICHT
 elif kategorie == "Gewicht in Gewicht":
@@ -169,6 +191,17 @@ elif kategorie == "Gewicht in Gewicht":
             ergebnis,
             zu_einheit
         )
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
+        data_manager = DataManager()
+        df = st.session_state["resultate_einheitenumrechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "einheitenumrechner_history.json")
+
 
 # FLÜSSIGKEIT → FLÜSSIGKEIT
 elif kategorie == "Flüssigkeit in Flüssigkeit":
@@ -197,14 +230,18 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
             ergebnis,
             zu_einheit
         )
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
+        data_manager = DataManager()
+        df = st.session_state["resultate_einheitenumrechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "einheitenumrechner_history.json")
 
-# HISTORIE + CSV
-data_manager = DataManager()
-
-data_manager.save_user_data(
-    st.session_state["resultate_einheitenumrechner"],
-    "data.csv"
-)
+# HISTORIE 
 
 st.subheader("Berechnungshistorie")
 

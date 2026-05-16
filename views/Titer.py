@@ -45,12 +45,16 @@ if st.button("Titer berechnen"):
         # 👉 Speicherung (JETZT korrekt genutzt)
         speichere_titer(c_soll, c_eff, titer)
 
-        # CSV speichern
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
         data_manager = DataManager()
-        data_manager.save_user_data(
-            st.session_state["resultate_titer_rechner"],
-            "titer_rechner.csv"
-        )
+        df = st.session_state["resultate_titer_rechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "titer_history.json")
 
     except ValueError as e:
         st.error(str(e))

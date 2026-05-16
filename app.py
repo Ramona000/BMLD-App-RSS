@@ -16,48 +16,87 @@ login_manager.login_register()             # stops if not logged in
 # --- END OF NEW CODE ---
 
 # --- CODE UPDATE: load user data from data manager if not already present in session state --
+
+#  ph-Rechner 
 if 'resultate_ph_rechner' not in st.session_state:
-    st.session_state['resultate_ph_rechner'] = data_manager.load_user_data(
-        'ph_rechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
+    history = data_manager.load_user_data('ph_rechner_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+        "timestamp", "Typ", "Konzentration (mol/L)", "pH", "Kategorie", "favorite"
+        ])
+    st.session_state['resultate_ph_rechner'] = df
 
+# Molare Masse-Rechner
+if 'resultate_molare_masse_rechner' not in st.session_state:
+    history = data_manager.load_user_data('molare_masse_rechner_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+        "timestamp", "Molekül", "Molare Masse (g/mol)", "favorite"
+        ])
+    st.session_state['resultate_molare_masse_rechner'] = df
 
-if 'resultate_mm_rechner' not in st.session_state:
-    st.session_state['resultate_mm_rechner'] = data_manager.load_user_data(
-        'mm_rechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
 # --- END OF CODE UPDATE ---
+# Verdünnungsrechner
 if 'resultate_verdünnungs_rechner' not in st.session_state:
-    st.session_state['resultate_verdünnungs_rechner'] = data_manager.load_user_data(
-        'verdünnungs_rechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
+    history = data_manager.load_user_data('verduennungs_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+            "timestamp", "C1", "C2", "V2", "V1", "favorite"
+        ])
+    st.session_state['resultate_verdünnungs_rechner'] = df
+
 # --- Bis hier hin ist Historie bereits eingefügt ---
+# Titer-Rechner
 if 'resultate_titer_rechner' not in st.session_state:
-    st.session_state['resultate_titer_rechner'] = data_manager.load_user_data(
-        'titer_rechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
+    history = data_manager.load_user_data('titer_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+            "timestamp", "c_soll", "c_eff", "titer"
+        ])
+    st.session_state['resultate_titer_rechner'] = df
 
+# Konzentrationsrechner
 if 'resultate_konzentrations_rechner' not in st.session_state:
-    st.session_state['resultate_konzentrations_rechner'] = data_manager.load_user_data(
-        'konzentrations_rechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
+    history = data_manager.load_user_data('konzentrations_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+            "timestamp", "Menge (g)", "Molmasse (g/mol)", "Volumen (L)", "Konzentration (mol/L)"
+        ])
+    st.session_state['resultate_konzentrations_rechner'] = df
 
+
+# Einheitenumrechner
 if 'resultate_einheitenumrechner' not in st.session_state:
-    st.session_state['resultate_einheitenumrechner'] = data_manager.load_user_data(
-        'einheitenumrechner.csv',                     # The file on switch drive where the data is stored
-        initial_value=pd.DataFrame(),   # Initial value if the file does not exist
-        parse_dates=['timestamp']       # Parse timestamp as datetime
-    )
+    history = data_manager.load_user_data('einheitenumrechner_history.json', initial_value=[])
+    df = pd.DataFrame(history)
+    if not df.empty and 'timestamp' in df.columns:
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+    else:
+    # Falls leer, sicherstellen, dass die erwarteten Spalten vorhanden sind
+        df = pd.DataFrame(columns=[
+            "timestamp", "Wert", "Von Einheit", "Zu Einheit", "Ergebnis"
+        ])
+    st.session_state['resultate_einheitenumrechner'] = df
 
 pg_home = st.Page("views/home.py", title="Startseite", icon=":material/home:", default=True)
 pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/info:")

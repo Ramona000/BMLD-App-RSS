@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 
+from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
 from functions.Verdünnungsrechner import (
@@ -47,7 +48,16 @@ if st.button("Berechnen"):
         st.pyplot(fig)
 
         speichere_verlauf(result)
-
+       
+        # SwitchDrive speichern (nur nach neuer Berechnung)
+        data_manager = DataManager()
+        df = st.session_state["resultate_verdünnungs_rechner"].copy()
+        df["timestamp"] = df["timestamp"].astype(str)    # Timestamp → ISO-String
+        history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "verduennungs_history.json")
     else:
         st.error("Fehlerhafte Eingabe")
 
@@ -58,6 +68,7 @@ st.data_editor(
     st.session_state["resultate_verdünnungs_rechner"],
     use_container_width=True
 )
+
 
 # NAVIGATION / HELP
 help_text = [

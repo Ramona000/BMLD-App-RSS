@@ -1,6 +1,7 @@
 print("MOLARE MASSEN MODUL WIRD GELADEN")
 import re
-from turtle import st
+import streamlit as st
+import pandas as pd
 import periodictable as pt
 from datetime import datetime
 #Funktion zum Zerlegen der Formel 
@@ -49,22 +50,22 @@ def speichere_verlauf(formel, molare_masse):
         "favorite": False
     }
 
-    if 'resultate_mm_rechner' not in st.session_state:
-        st.session_state['resultate_mm_rechner'] = pd.DataFrame(
+    if 'resultate_molare_masse_rechner' not in st.session_state:
+        st.session_state['resultate_molare_masse_rechner'] = pd.DataFrame(
             columns=[
                 'timestamp',
                 'Molekül',
                 'Molare Masse (g/mol)',
-                'favorite: False'
+                'favorite'
             ]
         )
 
-    st.session_state['resultate_mm_rechner'] = pd.concat(
+    st.session_state['resultate_molare_masse_rechner'] = pd.concat(
         [
-            st.session_state['resultate_mm_rechner'],
+            st.session_state['resultate_molare_masse_rechner'],
             pd.DataFrame([result])
         ],
         ignore_index=True
     )
 
-    return st.session_state['resultate_mm_rechner']
+    return st.session_state['resultate_molare_masse_rechner']

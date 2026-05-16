@@ -45,12 +45,16 @@ if st.button("Berechnen"):
             ],
             ignore_index=True
         )
-
+        # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
         data_manager = DataManager()
-        data_manager.save_user_data(
-            st.session_state['resultate_konzentrations_rechner'],
-            'data.csv'
-        )
+        df = st.session_state["resultate_konzentrations_rechner"].copy()
+        if "timestamp" in df.columns:
+            df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+            history = df.to_dict(orient="records")
+        if st.session_state.get("username") is None:
+            st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+        else:
+            data_manager.save_user_data(history, "konzentrations_history.json")
 
 st.subheader("Berechnungshistorie")
 st.dataframe(st.session_state['resultate_konzentrations_rechner'])

@@ -18,8 +18,8 @@ show_header("Molare Masse-Rechner")
 
 
 # SESSION STATE INIT
-if "resultate_mm_rechner" not in st.session_state:
-    st.session_state["resultate_mm_rechner"] = pd.DataFrame(
+if "resultate_molare_masse_rechner" not in st.session_state:
+    st.session_state["resultate_molare_masse_rechner"] = pd.DataFrame(
         columns=[
             "timestamp",
             "Molekül",
@@ -28,7 +28,7 @@ if "resultate_mm_rechner" not in st.session_state:
         ]
     )
 
-df = st.session_state["resultate_mm_rechner"]
+df = st.session_state["resultate_molare_masse_rechner"]
 
 # INPUT
 formula = st.text_input(
@@ -57,16 +57,23 @@ if calculate:
             # 🔥 wichtig: Verlauf speichern muss favorite enthalten
             speichere_verlauf(formula, molar_mass)
 
-            # CSV speichern
+            # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
             data_manager = DataManager()
-            data_manager.save_user_data(df, "data.csv")
+            df = st.session_state["resultate_molare_masse_rechner"].copy()
+            if "timestamp" in df.columns:
+                df["timestamp"] = df["timestamp"].astype(str)   # Timestamp → ISO-String
+                history = df.to_dict(orient="records")
+            if st.session_state.get("username") is None:
+                st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
+            else:
+                data_manager.save_user_data(history, "molare_masse_rechner_history.json")
         else:
             st.error("Unbekanntes Element!")
 
 # HISTORY
 st.subheader("Berechnungshistorie")
 
-df = st.session_state["resultate_mm_rechner"]
+df = st.session_state["resultate_molare_masse_rechner"]
 
 # 🔥 FIX: favorite Spalte absichern
 if "favorite" not in df.columns:
@@ -89,7 +96,7 @@ edited_df = st.data_editor(
     use_container_width=True
 )
 
-st.session_state["resultate_mm_rechner"] = edited_df
+st.session_state["resultate_molare_masse_rechner"] = edited_df
 
 # HELP SECTION
 help_text = [
@@ -103,7 +110,7 @@ col1, col2 = st.columns([1, 1])
 
 with col1:
     if st.button("Zur Startseite"):
-        st.switch_page("pages/home.py")
+        st.switch_page("views/home.py")
 
 with col2:
     show_help(title="Hilfe zum Molaremasse-Rechner", text_lines=help_text)
