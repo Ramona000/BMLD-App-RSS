@@ -1,3 +1,4 @@
+print("Verdünnungsrechner MODULE WIRD GELADEN")
 import pandas as pd
 import streamlit as st
 from datetime import datetime
@@ -39,10 +40,19 @@ def speichere_verlauf(result):
         st.session_state["resultate_verdünnungs_rechner"] = neuer_eintrag
 
     else:
+        df_alt = st.session_state["resultate_verdünnungs_rechner"]
+
         st.session_state["resultate_verdünnungs_rechner"] = pd.concat(
-            [st.session_state["resultate_verdünnungs_rechner"], neuer_eintrag],
-            ignore_index=True
+        [df_alt, neuer_eintrag],
+        ignore_index=True
         )
+
+# Safety-Net für favorite
+st.session_state["resultate_verdünnungs_rechner"]["favorite"] = (
+    st.session_state["resultate_verdünnungs_rechner"]["favorite"]
+    .fillna(False)
+    .astype(bool)
+)
 
 
 def plot_verduennung(C1, C2, V2, V1):

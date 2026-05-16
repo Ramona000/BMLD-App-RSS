@@ -44,11 +44,14 @@ if st.button("Berechnen"):
 # HISTORIE
 st.subheader("Berechnungshistorie")
 
-st.session_state["resultate_verdünnungs_rechner"]["favorite"] = (
-    st.session_state["resultate_verdünnungs_rechner"]["favorite"]
-    .fillna(False)
-    .astype(bool)
-)
+df = st.session_state["resultate_verdünnungs_rechner"]
+
+if "favorite" not in df.columns:
+    df["favorite"] = False
+
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
+
+st.session_state["resultate_verdünnungs_rechner"] = df
 
 st.data_editor(
     st.session_state["resultate_verdünnungs_rechner"],
