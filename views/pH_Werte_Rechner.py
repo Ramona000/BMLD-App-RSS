@@ -6,6 +6,7 @@ from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
 from functions.ph_Rechner import calculate_ph, speichere_verlauf_ph
 from utils.data_manager import DataManager
+from functions.ph_Rechner import *
 
 # SESSION STATE INIT
 if "resultate_ph_rechner" not in st.session_state:
@@ -43,6 +44,13 @@ if st.button("pH berechnen"):
     st.success(f"pH-Wert: {result['pH']}")
     st.info(f"Kategorie: {result['Kategorie']}")
 
+    #Grafik
+    st.subheader("pH-Skala")
+
+    st.pyplot(
+    ph_skala_farbe(result['pH'])
+)
+
     speichere_verlauf_ph(result)
 
     # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
@@ -55,6 +63,7 @@ if st.button("pH berechnen"):
         st.warning("Nicht angemeldet: Verlauf wurde nicht auf SwitchDrive gespeichert.")
     else:
         data_manager.save_user_data(history, "ph_rechner_history.json")
+
 
 # HISTORIE
 st.subheader("Berechnungshistorie")
