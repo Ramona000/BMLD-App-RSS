@@ -7,6 +7,7 @@ from functions import show_header
 
 from functions.Titer import berechnung_titer, interpretiere_titer, speichere_titer
 
+
 # SESSION STATE
 if "resultate_titer_rechner" not in st.session_state:
     st.session_state["resultate_titer_rechner"] = pd.DataFrame(
@@ -59,6 +60,13 @@ if st.button("Titer berechnen"):
     except ValueError as e:
         st.error(str(e))
 
+#Grafik
+st.subheader("Allgemeine Formel")
+
+st.latex(r'''
+T = \frac{c_{ist}}{c_{soll}}
+''')
+
 # HISTORIE
 st.subheader("Berechnungshistorie")
 
@@ -82,3 +90,4 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Titer-Rechner", text_lines=help_text)
+
