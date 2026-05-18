@@ -103,7 +103,7 @@ pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/i
 pg_third = st.Page("views/PSE.py", title="Periodensystem", icon=":material/info:")
 pg_fourth = st.Page("views/Einheitenumrechner.py", title="Einheitenumrechner", icon=":material/info:")
 pg_fifth = st.Page("views/Konzentrationsrechner.py", title="Konzentrationsrechner", icon=":material/info:")
-pg_sixth = st.Page("views/Molaremasserechner.py", title="Molare Massen Rechner", icon=":material/info:")
+pg_sixth = st.Page("views/Molaremassenrechner.py", title="Molare Massen Rechner", icon=":material/info:")
 pg_seventh = st.Page("views/pH_Werte_Rechner.py", title="pH-Rechner", icon=":material/info:")
 pg_eighth = st.Page("views/Titer.py", title="Titer-Rechner", icon=":material/info:")
 pg_ninth = st.Page("views/Verdünnungsrechner.py", title="Verdünnungsrechner", icon=":material/info:")

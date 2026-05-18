@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import periodictable as pt
 from datetime import datetime
+import matplotlib.pyplot as plt
 #Funktion zum Zerlegen der Formel 
 def parse_formula(formula):
     pattern = r'([A-Z][a-z]?)(\d*)'
@@ -69,3 +70,42 @@ def speichere_verlauf(formel, molare_masse):
     )
 
     return st.session_state['resultate_molare_masse_rechner']
+
+#Grafik
+def molare_masse_kreis(formel):
+
+    # Elemente und Anzahl finden
+    teile = re.findall(r'([A-Z][a-z]?)(\d*)', formel)
+
+    labels = []
+    werte = []
+
+    for element, anzahl in teile:
+
+        try:
+            atommasse = pt.elements.symbol(element).mass
+
+            if anzahl == "":
+                anzahl = 1
+            else:
+                anzahl = int(anzahl)
+
+            masse = atommasse * anzahl
+
+            labels.append(element)
+            werte.append(masse)
+
+        except:
+            pass
+
+    fig, ax = plt.subplots()
+
+    ax.pie(
+        werte,
+        labels=labels,
+        autopct='%1.1f%%'
+    )
+
+    ax.set_title(f"Massenanteile von {formel}")
+
+    return fig

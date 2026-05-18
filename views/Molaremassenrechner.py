@@ -11,6 +11,7 @@ from functions.Molaremassenrechner import (
     calculate_molar_mass,
     speichere_verlauf
 )
+from functions.Molaremassenrechner import *
 
 # HEADER
 show_navigation(current_page="Molaremasserechner")
@@ -114,3 +115,7 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Molaremasse-Rechner", text_lines=help_text)
+
+#Grafik
+if formula:
+    st.pyplot(molare_masse_kreis(formula))
