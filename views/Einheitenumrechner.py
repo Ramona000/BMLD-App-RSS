@@ -5,12 +5,16 @@ from functions.Einheitenumrechner import (
     umrechnen_volumen,
     volumen_zu_gewicht,
     gewicht_zu_volumen,
-    speichere_historie
+    speichere_historie,
+    gewicht_vergleiche,
+    volumen_vergleiche,
+    finde_vergleich,
+    gewicht_faktoren,
+    volumen_faktoren
 )
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
-from functions.Einheitenumrechner import *
 
 # SESSION STATE
 if "resultate_einheitenumrechner" not in st.session_state:
@@ -86,6 +90,14 @@ if kategorie == "Flüssigkeiten in Gewicht":
         )
 
         st.success(f"{ergebnis:.4f} {ziel_einheit}")
+        #Grafik
+        base_gramm = volumen * volumen_faktoren[volumen_einheit] * dichte
+
+        vergleich = finde_vergleich(base_gramm, gewicht_vergleiche)
+
+        if vergleich:
+            st.markdown("### 🌍 Realitätsvergleich")
+            st.success(f"≈ {vergleich}")
 
         speichere_historie(
             kategorie,
@@ -141,6 +153,14 @@ elif kategorie == "Gewicht in Flüssigkeit":
         )
 
         st.success(f"{ergebnis:.4f} {ziel_einheit}")
+        #Grafik
+        basis_gramm = gewicht * gewicht_faktoren[gewicht_einheit]
+
+        vergleich = finde_vergleich(basis_gramm, gewicht_vergleiche)
+
+        if vergleich:
+            st.markdown("### 🌍 Realitätsvergleich")
+            st.success(f"≈ {vergleich}")
 
         speichere_historie(
             kategorie,
@@ -183,6 +203,14 @@ elif kategorie == "Gewicht in Gewicht":
         )
 
         st.success(f"{ergebnis:.4f} {zu_einheit}")
+        #Grfaik
+        base_gramm = gewicht * gewicht_faktoren[von_einheit]
+
+        vergleich = finde_vergleich(base_gramm, gewicht_vergleiche)
+
+        if vergleich:
+            st.markdown("### 🌍 Realitätsvergleich")
+            st.success(f"≈ {vergleich}")
 
         speichere_historie(
             kategorie,
@@ -222,6 +250,14 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
         )
 
         st.success(f"{ergebnis:.4f} {zu_einheit}")
+        #Grafik
+        base_ml = volumen * volumen_faktoren[von_einheit]
+
+        vergleich = finde_vergleich(base_ml, volumen_vergleiche)
+
+        if vergleich:
+            st.markdown("### 🌍 Realitätsvergleich")
+            st.success(f"≈ {vergleich}")
 
         speichere_historie(
             kategorie,
@@ -259,7 +295,3 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Einheitenumrechner")
-
-st.subheader("Grafische Darstellung")
-
-st.pyplot(gewichtseinheiten_balken(gewicht_faktoren))

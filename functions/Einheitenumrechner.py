@@ -117,19 +117,36 @@ def speichere_historie(
         )
 
 #Grafik
-def gewichtseinheiten_balken(gewicht_faktoren):
+gewicht_vergleiche = [
+    (1, "eine Büroklammer 📎"),
+    (5, "eine Feder 🪶"),
+    (50, "ein Ei 🥚"),
+    (250, "ein Stück Butter 🧈"),
+    (1000, "eine Wasserflasche 💧"),
+    (5000, "eine Bowlingkugel 🎳"),
+    (80000, "ein Mensch 🚶"),
+    (1_000_000, "ein kleines Auto 🚗")
+]
 
-    einheiten = list(gewicht_faktoren.keys())
-    werte = list(gewicht_faktoren.values())
+volumen_vergleiche = [
+    (1, "ein Tropfen 💧"),
+    (5, "ein Teelöffel 🥄"),
+    (30, "ein Schnapsglas 🥃"),
+    (330, "eine Cola-Dose 🥤"),
+    (500, "eine Wasserflasche 💦"),
+    (1000, "ein Milchkarton 🥛"),
+    (5000, "ein Putzeimer 🪣"),
+    (100000, "eine Badewanne 🛁")
+]
 
-    fig, ax = plt.subplots()
 
-    ax.bar(einheiten, werte)
+def finde_vergleich(wert, liste):
+    passender_text = None
 
-    ax.set_yscale("log")
+    for grenze, text in liste:
+        if wert >= grenze:
+            passender_text = text
+        else:
+            break
 
-    ax.set_title("Vergleich der Gewichtseinheiten")
-    ax.set_xlabel("Einheiten")
-    ax.set_ylabel("Faktor zu Gramm (logarithmisch)")
-
-    return fig
+    return passender_text
