@@ -99,14 +99,14 @@ if 'resultate_einheitenumrechner' not in st.session_state:
     st.session_state['resultate_einheitenumrechner'] = df
 
 pg_home = st.Page("views/home.py", title="Startseite", icon=":material/home:", default=True)
-pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/info:")
-pg_third = st.Page("views/PSE.py", title="Periodensystem", icon=":material/info:")
-pg_fourth = st.Page("views/Einheitenumrechner.py", title="Einheitenumrechner", icon=":material/info:")
-pg_fifth = st.Page("views/Konzentrationsrechner.py", title="Konzentrationsrechner", icon=":material/info:")
-pg_sixth = st.Page("views/Molaremassenrechner.py", title="Molare Massen Rechner", icon=":material/info:")
-pg_seventh = st.Page("views/pH_Werte_Rechner.py", title="pH-Rechner", icon=":material/info:")
-pg_eighth = st.Page("views/Titer.py", title="Titer-Rechner", icon=":material/info:")
-pg_ninth = st.Page("views/Verdünnungsrechner.py", title="Verdünnungsrechner", icon=":material/info:")
+pg_second = st.Page("views/Einleitung.py", title="Einleitung", icon=":material/menu_book:")
+pg_third = st.Page("views/Favoritenliste.py", title="Favoriten", icon=":material/star:")
+pg_fourth = st.Page("views/PSE.py", title="Periodensystem", icon=":material/info:")
+pg_fifth = st.Page("views/Einheitenumrechner.py", title="Einheitenumrechner", icon=":material/info:")
+pg_sixth = st.Page("views/Konzentrationsrechner.py", title="Konzentrationsrechner", icon=":material/info:")
+pg_seventh = st.Page("views/Molaremassenrechner.py", title="Molare Massen Rechner", icon=":material/info:")
+pg_eighth = st.Page("views/pH_Werte_Rechner.py", title="pH-Rechner", icon=":material/info:")
+pg_ninth = st.Page("views/Titer.py", title="Titer-Rechner", icon=":material/info:")
 pg_tenth = st.Page("views/Einstellungen.py", title="Einstellungen", icon=":material/settings:")
 
 pg = st.navigation([pg_home, pg_second, pg_third, pg_fourth, pg_fifth, pg_sixth, pg_seventh, pg_eighth, pg_ninth, pg_tenth])
