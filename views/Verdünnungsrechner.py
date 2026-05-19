@@ -13,7 +13,7 @@ from functions.Verdünnungsrechner import (
 # SESSION STATE INIT
 if "resultate_verdünnungs_rechner" not in st.session_state:
     st.session_state["resultate_verdünnungs_rechner"] = pd.DataFrame(
-        columns=["timestamp", "C1", "C2", "V2", "V1", "favorite"]
+        columns=["timestamp", "rechner", "C1", "C2", "V2", "V1", "favorite"]
     )
 
 # Safety: favorite immer sicherstellen
@@ -67,8 +67,18 @@ st.subheader("Berechnungshistorie")
 edited_df = st.data_editor(
     st.session_state["resultate_verdünnungs_rechner"],
     use_container_width=True,
-    column_config={"favorite": st.column_config.CheckboxColumn("Favorit")},
-    disabled=["timestamp", "C1", "C2", "V2", "V1"])
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=[
+        "timestamp",
+        "rechner",
+        "C1",
+        "C2",
+        "V2",
+        "V1"
+    ]
+)
 
 st.session_state["resultate_verdünnungs_rechner"]= edited_df
 

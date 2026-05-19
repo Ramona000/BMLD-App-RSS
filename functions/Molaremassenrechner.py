@@ -57,6 +57,7 @@ def speichere_verlauf(formel, molare_masse):
             columns=[
                 'timestamp',
                 'rechner',
+                'rechner',
                 'Molekül',
                 'Molare Masse (g/mol)',
                 'favorite'

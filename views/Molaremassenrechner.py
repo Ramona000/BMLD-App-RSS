@@ -12,6 +12,7 @@ from functions.Molaremassenrechner import (
     speichere_verlauf
 )
 from functions.Molaremassenrechner import *
+from functions.Favorites import normalize_df
 
 # HEADER
 show_navigation(current_page="Molaremasserechner")
@@ -28,6 +29,21 @@ if "resultate_molare_masse_rechner" not in st.session_state:
             "favorite"
         ]
     )
+if "resultate_molare_masse_rechner" not in st.session_state:
+    st.session_state["resultate_molare_masse_rechner"] = pd.DataFrame(
+        columns=[
+            "timestamp",
+            "rechner",
+            "Molekül",
+            "Molare Masse (g/mol)",
+            "favorite"
+        ]
+    )
+
+st.session_state["resultate_molare_masse_rechner"] = normalize_df(
+    st.session_state["resultate_molare_masse_rechner"],
+    "Molaremassen-Rechner"
+)
 
 df = st.session_state["resultate_molare_masse_rechner"]
 

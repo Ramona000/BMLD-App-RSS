@@ -77,7 +77,7 @@ def show_navigation(current_page=None):
             "Einheitenumrechner": "views/Einheitenumrechner.py",
             "Titer": "views/Titer.py",
             "Konzentrationsrechner": "views/Konzentrationsrechner.py",
-            "Molare Masse Rechner": "views/Molaremasserechner.py",
+            "Molare Masse Rechner": "views/Molaremassenrechner.py",
             "pH-Werte Rechner": "views/pH_Werte_Rechner.py",
             "Verdünnungsrechner": "views/Verdünnungsrechner.py",
             "Favoriten": "views/Favoritenliste.py",
@@ -102,3 +102,4 @@ def show_navigation(current_page=None):
                             st.switch_page(path)
                 if st.button("Schließen", key="close_nav"):
                     st.session_state.nav_modal_open = False
+        

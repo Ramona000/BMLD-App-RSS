@@ -11,7 +11,14 @@ from functions.Titer import berechnung_titer, interpretiere_titer, speichere_tit
 # SESSION STATE
 if "resultate_titer_rechner" not in st.session_state:
     st.session_state["resultate_titer_rechner"] = pd.DataFrame(
-        columns=["timestamp", "c_soll", "c_eff", "titer"]
+        columns=[
+            "timestamp",
+            "rechner",
+            "c_soll",
+            "c_eff",
+            "titer",
+            "favorite"
+        ]
     )
 
 # HEADER & NAVIGATION
@@ -70,10 +77,30 @@ T = \frac{c_{ist}}{c_{soll}}
 # HISTORIE
 st.subheader("Berechnungshistorie")
 
-st.dataframe(
-    st.session_state["resultate_titer_rechner"],
+df = st.session_state["resultate_titer_rechner"]
+
+# favorite absichern
+if "favorite" not in df.columns:
+    df["favorite"] = False
+
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
+
+edited_df = st.data_editor(
+    df,
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=[
+        "timestamp",
+        "rechner",
+        "c_soll",
+        "c_eff",
+        "titer"
+    ],
     use_container_width=True
 )
+
+st.session_state["resultate_titer_rechner"] = edited_df
 
 # HELP
 help_text = [

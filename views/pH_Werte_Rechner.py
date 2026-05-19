@@ -7,12 +7,14 @@ from functions import show_header
 from functions.ph_Rechner import calculate_ph, speichere_verlauf_ph
 from utils.data_manager import DataManager
 from functions.ph_Rechner import *
+from functions.Favorites import normalize_df
 
 # SESSION STATE INIT
 if "resultate_ph_rechner" not in st.session_state:
     st.session_state["resultate_ph_rechner"] = pd.DataFrame(
         columns=[
             "timestamp",
+            "rechner",
             "Typ",
             "Konzentration (mol/L)",
             "pH",
@@ -20,6 +22,11 @@ if "resultate_ph_rechner" not in st.session_state:
             "favorite"
         ]
     )
+
+st.session_state["resultate_ph_rechner"] = normalize_df(
+    st.session_state["resultate_ph_rechner"],
+    "pH-Rechner"
+)
 
 # UI HEADER
 show_navigation(current_page="pH_Werte_Rechner")
@@ -75,7 +82,23 @@ if "favorite" not in df.columns:
 
 df["favorite"] = df["favorite"].fillna(False).astype(bool)
 
-st.data_editor(df, use_container_width=True)
+edited_df = st.data_editor(
+    df,
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=[
+        "timestamp",
+        "rechner",
+        "Typ",
+        "Konzentration (mol/L)",
+        "pH",
+        "Kategorie"
+    ],
+    use_container_width=True
+)
+
+st.session_state["resultate_ph_rechner"] = edited_df
 
 # CHART (optional, bleibt wie vorher)
 if not df.empty:
