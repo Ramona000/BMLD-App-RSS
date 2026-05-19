@@ -32,13 +32,20 @@ df["favorite"] = df["favorite"].fillna(False)
 
 # Nur Favoriten
 favoriten = df[df["favorite"] == True]
+if "rechner" not in favoriten.columns:
+    favoriten["rechner"] = "Unbekannt"
 
 if favoriten.empty:
     st.info("Noch keine Favoriten markiert.")
     st.stop()
 
 # 🔽 Filter nach Rechner
-rechner_liste = ["Alle"] + sorted(favoriten["rechner"].unique())
+rechner_liste = ["Alle"] + sorted(
+    favoriten["rechner"]
+    .dropna()
+    .astype(str)
+    .unique()
+)
 auswahl = st.selectbox("Rechner filtern", rechner_liste)
 
 if auswahl != "Alle":

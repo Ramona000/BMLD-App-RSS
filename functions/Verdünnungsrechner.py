@@ -28,7 +28,7 @@ def speichere_verlauf(result):
 
     neuer_eintrag = pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
-        "rechenart": "Verdünnungsrechner",
+        "rechner": "Verdünnungsrechner",
         "C1": result["C1"],
         "C2": result["C2"],
         "V2": result["V2"],

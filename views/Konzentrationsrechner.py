@@ -13,7 +13,7 @@ from functions.Konzentrationsrechner import *
 # Session State initialisieren
 if 'resultate_konzentrations_rechner' not in st.session_state:
     st.session_state['resultate_konzentrations_rechner'] = pd.DataFrame(
-        columns=["timestamp", "stoffmenge", "volumen", "konzentration"]
+        columns=["timestamp", "favorite", "stoffmenge", "volumen", "konzentration"]
     )
 
 show_navigation(current_page="Konzentrationsrechner")
@@ -45,6 +45,9 @@ if st.button("Berechnen"):
             ],
             ignore_index=True
         )
+                # FAVORITE SPALTE ABSICHERN
+        st.session_state['resultate_konzentrations_rechner']["favorite"] = \
+            st.session_state['resultate_konzentrations_rechner']["favorite"].fillna(False).astype(bool)
         # SwitchDrive speichern (nur nach erfolgreicher Berechnung)
         data_manager = DataManager()
         df = st.session_state["resultate_konzentrations_rechner"].copy()
@@ -57,7 +60,20 @@ if st.button("Berechnen"):
             data_manager.save_user_data(history, "konzentrations_history.json")
 
 st.subheader("Berechnungshistorie")
-st.dataframe(st.session_state['resultate_konzentrations_rechner'])
+df = st.session_state['resultate_konzentrations_rechner']
+
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
+
+edited_df = st.data_editor(
+    df,
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=["timestamp", "stoffmenge", "volumen", "konzentration"],
+    use_container_width=True
+)
+
+st.session_state['resultate_konzentrations_rechner'] = edited_df
 
 help_text = [
     "Gib Stoffmenge und Volumen ein.",

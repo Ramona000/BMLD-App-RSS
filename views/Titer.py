@@ -90,4 +90,3 @@ with col1:
 
 with col2:
     show_help(title="Hilfe zum Titer-Rechner", text_lines=help_text)
-
