@@ -13,7 +13,7 @@ from functions.Konzentrationsrechner import *
 # Session State initialisieren
 if 'resultate_konzentrations_rechner' not in st.session_state:
     st.session_state['resultate_konzentrations_rechner'] = pd.DataFrame(
-        columns=["timestamp", "favorite", "stoffmenge", "volumen", "konzentration"]
+        columns=["timestamp", "rechner", "favorite", "stoffmenge", "volumen", "konzentration"]
     )
 
 show_navigation(current_page="Konzentrationsrechner")

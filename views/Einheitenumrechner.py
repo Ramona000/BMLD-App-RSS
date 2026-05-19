@@ -15,11 +15,13 @@ from functions.Einheitenumrechner import (
 from utils.data_manager import DataManager
 from views.Hilfefenster import show_help, show_navigation
 from functions import show_header
+from functions.Favorites import normalize_df
 
 # SESSION STATE
 if "resultate_einheitenumrechner" not in st.session_state:
     st.session_state["resultate_einheitenumrechner"] = pd.DataFrame(columns=[
         "timestamp",
+        "rechner",
         "kategorie",
         "eingabewert",
         "eingabeeinheit",
@@ -27,8 +29,13 @@ if "resultate_einheitenumrechner" not in st.session_state:
         "ausgabeeinheit",
         "substanz_kategorie",
         "substanz",
-        "dichte"
+        "dichte",
+        "favorite" 
     ])
+st.session_state["resultate_einheitenumrechner"] = normalize_df(
+    st.session_state["resultate_einheitenumrechner"],
+    "Einheitenumrechner"
+)
 
 # HEADER
 show_navigation(current_page="Einheitenumrechner")
@@ -281,10 +288,21 @@ elif kategorie == "Flüssigkeit in Flüssigkeit":
 
 st.subheader("Berechnungshistorie")
 
-st.dataframe(
-    st.session_state["resultate_einheitenumrechner"],
+df = st.session_state["resultate_einheitenumrechner"]
+
+df["favorite"] = df["favorite"].fillna(False).astype(bool)
+
+edited_df = st.data_editor(
+    df,
+    column_config={
+        "favorite": st.column_config.CheckboxColumn("Favorit")
+    },
+    disabled=["timestamp", "rechner", "kategorie", "eingabewert", "eingabeeinheit",
+              "ausgabewert", "ausgabeeinheit", "substanz_kategorie", "substanz", "dichte"],
     use_container_width=True
 )
+
+st.session_state["resultate_einheitenumrechner"] = edited_df
 
 # NAVIGATION
 col1, col2 = st.columns(2)

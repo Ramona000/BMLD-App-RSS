@@ -38,3 +38,13 @@ def konzentration_linie():
     ax.set_ylabel("Konzentration")
 
     return fig
+
+def erstelle_verlaufseintrag(stoffmenge, volumen, konzentration):
+    return pd.DataFrame([{
+        "timestamp": pd.Timestamp.now(),
+        "rechner": "Konzentrationsrechner",
+        "stoffmenge": stoffmenge,
+        "volumen": volumen,
+        "konzentration": konzentration,
+        "favorite": False
+    }])

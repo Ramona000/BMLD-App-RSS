@@ -46,7 +46,7 @@ def speichere_verlauf(formel, molare_masse):
 
     result = {
         "timestamp": datetime.now(),
-        "rechner": "Molaremasse-Rechner",
+        "rechner": "Molaremassen-Rechner",
         "Molekül": formel,
         "Molare Masse (g/mol)": round(molare_masse, 3),
         "favorite": False
