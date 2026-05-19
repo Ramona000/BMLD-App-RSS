@@ -64,10 +64,13 @@ if st.button("Berechnen"):
 # HISTORIE
 st.subheader("Berechnungshistorie")
 
-st.data_editor(
+edited_df = st.data_editor(
     st.session_state["resultate_verdünnungs_rechner"],
-    use_container_width=True
-)
+    use_container_width=True,
+    column_config={"favorite": st.column_config.CheckboxColumn("Favorit")},
+    disabled=["timestamp", "C1", "C2", "V2", "V1"])
+
+st.session_state["resultate_verdünnungs_rechner"]= edited_df
 
 
 # NAVIGATION / HELP

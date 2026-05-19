@@ -41,6 +41,7 @@ def speichere_verlauf_ph(result):
 
     neuer_eintrag = pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
+        "rechner": "pH-Rechner",
         "Typ": result["Typ"],
         "Konzentration (mol/L)": result["Konzentration (mol/L)"],
         "pH": result["pH"],

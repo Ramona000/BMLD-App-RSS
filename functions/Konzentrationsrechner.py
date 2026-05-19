@@ -11,6 +11,7 @@ def berechne_konzentration(stoffmenge: float, volumen: float) -> float | None:
 def erstelle_verlaufseintrag(stoffmenge, volumen, konzentration):
     return pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
+        "rechner": "Konzentrationsrechner",
         "stoffmenge": stoffmenge,
         "volumen": volumen,
         "konzentration": konzentration,

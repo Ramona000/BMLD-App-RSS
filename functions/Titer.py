@@ -30,6 +30,7 @@ def speichere_titer(c_soll, c_eff, titer):
 
     neuer_eintrag = pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
+        "rechner": "Titer-Rechner",
         "c_soll": c_soll,
         "c_eff": c_eff,
         "titer": titer,

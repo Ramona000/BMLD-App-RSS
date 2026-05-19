@@ -28,6 +28,7 @@ def speichere_verlauf(result):
 
     neuer_eintrag = pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
+        "rechenart": "Verdünnungsrechner",
         "C1": result["C1"],
         "C2": result["C2"],
         "V2": result["V2"],
@@ -38,10 +39,8 @@ def speichere_verlauf(result):
     if "resultate_verdünnungs_rechner" not in st.session_state:
         st.session_state["resultate_verdünnungs_rechner"] = neuer_eintrag
     else:
-        df_alt = st.session_state["resultate_verdünnungs_rechner"]
-
         st.session_state["resultate_verdünnungs_rechner"] = pd.concat(
-            [df_alt, neuer_eintrag],
+            [st.session_state["resultate_verdünnungs_rechner"], neuer_eintrag],
             ignore_index=True
         )
 

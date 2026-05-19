@@ -46,6 +46,7 @@ def speichere_verlauf(formel, molare_masse):
 
     result = {
         "timestamp": datetime.now(),
+        "rechner": "Molaremasse-Rechner",
         "Molekül": formel,
         "Molare Masse (g/mol)": round(molare_masse, 3),
         "favorite": False
@@ -55,6 +56,7 @@ def speichere_verlauf(formel, molare_masse):
         st.session_state['resultate_molare_masse_rechner'] = pd.DataFrame(
             columns=[
                 'timestamp',
+                'rechner',
                 'Molekül',
                 'Molare Masse (g/mol)',
                 'favorite'

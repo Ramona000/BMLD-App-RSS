@@ -94,6 +94,7 @@ def speichere_historie(
 
     neuer_eintrag = pd.DataFrame([{
         "timestamp": pd.Timestamp.now(),
+        "rechner": "Einheitenumrechner",
         "kategorie": kategorie,
         "eingabewert": eingabewert,
         "eingabeeinheit": eingabeeinheit,

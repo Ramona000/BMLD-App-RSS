@@ -80,6 +80,7 @@ def show_navigation(current_page=None):
             "Molare Masse Rechner": "views/Molaremasserechner.py",
             "pH-Werte Rechner": "views/pH_Werte_Rechner.py",
             "Verdünnungsrechner": "views/Verdünnungsrechner.py",
+            "Favoriten": "views/Favoritenliste.py",
             "Zur Startseite": "views/home.py"
         }
 
