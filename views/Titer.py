@@ -106,7 +106,9 @@ st.session_state["resultate_titer_rechner"] = edited_df
 help_text = [
     "Gib Soll- und Effektiv-Konzentration ein.",
     "Klicke auf Berechnen.",
-    "Interpretation wird automatisch angezeigt."
+    "Interpretation wird automatisch angezeigt.",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
 col1, col2 = st.columns([1, 1])

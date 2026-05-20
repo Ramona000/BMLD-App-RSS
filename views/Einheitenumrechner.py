@@ -312,4 +312,11 @@ with col1:
         st.switch_page("views/home.py")
 
 with col2:
-    show_help(title="Hilfe zum Einheitenumrechner")
+    show_help(title="Hilfe zum Einheitenumrechner", 
+              text_lines=[
+                  "Wähle die richtige Kategorie für deine Umrechnung aus.",
+                  "Gib die entstehenen Felder ein (z.B. Volumen, Einheiten, Substanz).",
+                  "Klicke auf Umrechnen, um das Ergebnis zu erhalten.",
+                  "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+                    "[Frag ChatGPT!](https://chat.openai.com)"
+                ])

@@ -6,7 +6,6 @@ import pytz
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 def calculate_ph(typ, konzentration):
     """
     Berechnet pH-Wert strukturiert

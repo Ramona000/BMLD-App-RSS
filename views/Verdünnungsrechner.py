@@ -85,10 +85,12 @@ st.session_state["resultate_verdünnungs_rechner"]= edited_df
 
 # NAVIGATION / HELP
 help_text = [
-    "C1 eingeben",
-    "C2 eingeben",
-    "V2 eingeben",
-    "Berechnen klicken"
+    "Anfangskonzentration eingeben",
+    "Gewünschte Zielkonzentration eingeben",
+    "Gewünschtes Endvolumen eingeben",
+    "Berechnen klicken",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
 col1, col2 = st.columns(2)

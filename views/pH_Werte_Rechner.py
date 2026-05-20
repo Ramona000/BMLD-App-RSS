@@ -138,10 +138,11 @@ if not df.empty:
 
 # HELP
 help_text = [
-    "Typ wählen",
+    "Auswählen ob es eine Säure oder Base ist",
     "Konzentration eingeben",
     "Berechnen klicken",
-    "Verlauf wird gespeichert"
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
+    "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
 col1, col2 = st.columns(2)

@@ -119,7 +119,7 @@ st.session_state["resultate_molare_masse_rechner"] = edited_df
 help_text = [
     "Gib eine chemische Formel ein z.B. C6H12O6 für Glucose.",
     "Klicke auf Berechnen, um die molare Masse zu erhalten.",
-    "Wenn es nicht klappt: ChatGPT fragen 😄",
+    "Du kommst immer noch nicht weiter? Dann gehts dir wie uns, also frag doch einfach ChatGPT! :)",
     "[Frag ChatGPT!](https://chat.openai.com)"
 ]
 
