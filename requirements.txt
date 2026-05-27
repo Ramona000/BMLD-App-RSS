@@ -8,3 +8,4 @@ matplotlib
 numpy
 pytz
 periodictable
+bcrypt

@@ -15,6 +15,11 @@ login_manager = LoginManager(data_manager) # handles user login and registration
 login_manager.login_register()             # stops if not logged in
 # --- END OF NEW CODE ---
 
+# Avatar laden - NEUE ZEILEN
+if 'selected_avatar' not in st.session_state:
+    saved_avatar = data_manager.load_user_data('user_avatar.json', initial_value={"avatar": "👤"})
+    st.session_state.selected_avatar = saved_avatar.get("avatar", "👤")
+
 # --- CODE UPDATE: load user data from data manager if not already present in session state --
 
 #  ph-Rechner 

@@ -2,6 +2,8 @@ import secrets
 import streamlit as st
 import streamlit_authenticator as stauth
 from utils.data_manager import DataManager
+import re
+import bcrypt
 
 
 class LoginManager:
@@ -51,19 +53,19 @@ class LoginManager:
             self.auth_credentials, self.auth_cookie_name, self.auth_cookie_key
         )
 
-    def _load_auth_credentials(self):
-        """
-        Loads user credentials from the configured credentials file.
-
-        Returns:
-            dict: User credentials, defaulting to empty usernames dict if file not found.
-        """
-        return self.data_manager.load_app_data(self.auth_credentials_file, initial_value={"usernames": {}})
-
     def _save_auth_credentials(self):
-        """Saves current user credentials to the credentials file."""
+        self.auth_credentials = self._normalize_auth_credentials(self.auth_credentials)
         self.data_manager.save_app_data(self.auth_credentials, self.auth_credentials_file)
-
+    
+    def _normalize_auth_credentials(self, auth_credentials):
+        if auth_credentials is None:
+            return {"usernames": {}}
+        if "usernames" in auth_credentials:
+            return auth_credentials
+        if "credentials" in auth_credentials and isinstance(auth_credentials["credentials"], dict):
+            return {"usernames": auth_credentials["credentials"].get("usernames", {})}
+        return {"usernames": {}}
+    
     def login_register(self, login_title='Login', register_title='Register new user'):
         """
         Handles authentication. When not logged in, shows the login/register page
@@ -114,8 +116,91 @@ class LoginManager:
         res = self.authenticator.register_user()
         if res[1] is not None:
             st.success(f"User {res[1]} registered successfully")
+            self.auth_credentials = self._normalize_auth_credentials(self.auth_credentials)
             try:
                 self._save_auth_credentials()
                 st.success("Credentials saved successfully")
             except Exception as e:
                 st.error(f"Failed to save credentials: {e}")
+
+    def change_password(self, username: str, current_password: str, new_password: str) -> tuple[bool, str]:
+        # DEBUG: Ausgeben, was wir erhalten
+        print(f"DEBUG: username = {username}")
+        print(f"DEBUG: auth_credentials keys = {self.auth_credentials.keys()}")
+        print(f"DEBUG: full auth_credentials = {self.auth_credentials}")
+        
+        if not username:
+            return False, "Nicht eingeloggt"
+
+        usernames = self.auth_credentials.get('usernames', {})
+        print(f"DEBUG: usernames = {usernames}")
+        print(f"DEBUG: usernames.keys() = {list(usernames.keys())}")
+    
+        if username not in usernames:
+            return False, "Benutzer nicht gefunden"
+
+        user_creds = usernames[username]
+        stored_hash = user_creds.get('password')
+        if stored_hash is None:
+            return False, "Kein gespeichertes Passwort gefunden"
+
+        # Prüfen aktuelles Passwort (bcrypt)
+        try:
+            if not bcrypt.checkpw(current_password.encode(), stored_hash.encode()):
+                return False, "Aktuelles Passwort ist falsch"
+        except Exception as e:
+            return False, f"Fehler bei Passwortüberprüfung: {e}"
+
+        # Neues Passwort validieren
+        if not validate_password(new_password):
+            return False, ("Passwort muss 8-20 Zeichen lang sein und enthalten: "
+                           "Grossbuchstaben, Kleinbuchstaben, Zahl und Sonderzeichen (@$!%*?&)")
+
+        # Neues Passwort hashen
+        try:
+            hashed_password = bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()).decode()
+        except Exception as e:
+            return False, f"Fehler beim Hashen des Passworts: {e}"
+
+        # Passwort aktualisieren und speichern
+        self.auth_credentials['usernames'][username]['password'] = hashed_password
+        self._save_auth_credentials()
+        return True, "Passwort erfolgreich geändert"
+    
+    def _normalize_auth_credentials(self, auth_credentials):
+        if auth_credentials is None:
+            return {"usernames": {}}
+        if "usernames" in auth_credentials:
+            return auth_credentials
+        if "credentials" in auth_credentials and isinstance(auth_credentials["credentials"], dict):
+            return {"usernames": auth_credentials["credentials"].get("usernames", {})}
+        return {"usernames": {}}
+
+    def _load_auth_credentials(self):
+        auth_credentials = self.data_manager.load_app_data(
+            self.auth_credentials_file,
+            initial_value={"usernames": {}}
+        )
+        return self._normalize_auth_credentials(auth_credentials)
+
+def validate_password(password):
+    """
+    Passwortregeln:
+    - mindestens 8 Zeichen
+    - mindestens 1 Grossbuchstabe
+    - mindestens 1 Kleinbuchstabe
+    - mindestens 1 Zahl
+    """
+    if len(password) < 8:
+        return False
+
+    if not re.search(r"[A-Z]", password):
+        return False
+
+    if not re.search(r"[a-z]", password):
+        return False
+
+    if not re.search(r"\d", password):
+        return False
+
+    return True
