@@ -10,6 +10,6 @@ Diese App wurde von folgenden Personen entwickelt:
 Unsere Idee:
 Die App „Laborrechner“ bündelt alle wichtigen Berechnungen für den Laboralltag in einer übersichtlichen und benutzerfreundlichen Oberfläche. Durch integrierte Rechner und eine Favoritenfunktion können häufig benötigte Werte einfach wiederverwendet werden, was die Effizienz steigert und Fehler reduziert.
 
-Link zu unserer App: https://bmld-inf2-appv0-ramona-5ep9wuue6zgxlsngywubay.streamlit.app/
+Link zu unserer App: https://bmld-app-rss.streamlit.app/
 
 
